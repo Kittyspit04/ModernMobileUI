@@ -49,6 +49,16 @@ you are connected to.
   (`/chat-theme glass`, `/chat-theme scope=character midnight`, `/chat-theme default`). A chat's theme is
   saved inside the chat file, so it survives renames, backups and other devices; character themes are saved
   in the extension settings. Switching between chats with different themes cross-fades smoothly.
+- **Backgrounds per chat**: the same picker has a **Background** grid with your backgrounds (and the ones
+  uploaded to the open chat). Pick one for **This chat** or for **All chats with** the character or group;
+  the first tile goes back to the global (or character) background. Order: this chat, then this character,
+  then SillyTavern's global background. A chat background is SillyTavern's own chat lock, so the lock in the
+  Backgrounds panel, `/lockbg` and `/unlockbg` stay in sync with it. Zinc, Midnight and Light cover the
+  background, so picking one switches that chat (or character) to Liquid Glass; the glass tint follows each
+  chat's background. Also `/chat-bg tavern`, `/chat-bg scope=character forest` (a file name or part of
+  it) and `/chat-bg default`. New backgrounds are still uploaded in SillyTavern's Backgrounds panel; a pick
+  there changes the global background, which a character background keeps covering in that
+  character's chats.
 - **Chat layouts**: Minimal (grey bubbles) or Colorful (your bubbles in an accent gradient, each character
   tinted with its own hue, coloured names and avatar rings). Accent colour is a picker.
 - Adjustable bubble roundness, avatar size, name badge text, home greeting, font, and whether the
@@ -127,7 +137,9 @@ All options live in **Extensions → Modern Mobile UI**. Changes apply live, no 
 
 ## Where things are stored
 
-Everything is kept in `extension_settings.modernMobileUI` in your SillyTavern user settings.
+Everything is kept in `extension_settings.modernMobileUI` in your SillyTavern user settings, except what
+belongs to one chat: a chat's theme is saved in the chat file's metadata (`modernMobileUI`), and a chat's
+background in SillyTavern's own `custom_background` field there.
 
 ## Development notes
 
@@ -137,6 +149,7 @@ Everything is kept in `extension_settings.modernMobileUI` in your SillyTavern us
 - `lib/sliderlock.js` – the lock, the floating pill and the hint.
 - `lib/layout.js` – auto-hiding bar, pull-tab, edge swipe, message navigation, tablet width, density.
 - `lib/chattheme.js` – per-chat and per-character theme storage and resolution; `ui/chattheme.js` – the picker, wand item, `/chat-theme`.
+- `lib/chatbg.js` – backgrounds per chat (SillyTavern's chat lock) and per character, `/chat-bg`.
 - `lib/glass.js` – Liquid Glass: samples the background for tint, rim colour and readability floor.
 - `lib/welcome.js` – start screen: hide greeting/shortcuts, preview clean-up with display regex and custom rules.
 - `ui/settings.js` – the settings block in the Extensions panel.

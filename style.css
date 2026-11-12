@@ -1175,6 +1175,63 @@ body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(3) { animation-delay:
 body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(4) { animation-delay: 0.09s; }
 body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(5) { animation-delay: 0.12s; }
 
+/* Background chooser (per chat / per character) */
+.mmu-bg { display: flex; flex-direction: column; gap: 6px; }
+.mmu-bg-note[hidden], .mmu-bg-filter[hidden] { display: none !important; }
+.mmu-bg-note { opacity: 0.8; }
+.mmu-bg-filter { margin: 0 !important; width: 100%; border-radius: 10px !important; font-size: 13px !important; }
+.mmu-bg-grid {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;
+    max-height: 232px; overflow-y: auto; overscroll-behavior: contain; padding: 2px; margin: -2px;
+    scrollbar-width: thin;
+}
+.mmu-bg-tile {
+    position: relative; display: block; aspect-ratio: 16 / 10; min-width: 0; padding: 0; margin: 0;
+    border: 0; border-radius: 10px; overflow: hidden; cursor: pointer; color: #fff;
+    background: rgba(127, 127, 127, 0.18);
+    box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.22);
+    transition: transform 0.25s var(--cai-pop, ease), box-shadow 0.2s ease;
+}
+.mmu-bg-tile[hidden] { display: none; }
+.mmu-bg-tile:active { transform: scale(0.95); }
+.mmu-bg-img { position: absolute; inset: 0; background: center / cover no-repeat; transition: transform 0.4s ease; }
+.mmu-bg-tile:hover .mmu-bg-img { transform: scale(1.05); }
+.mmu-bg-name {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 6px 4px;
+    font-size: 10.5px; font-weight: 600; line-height: 1.2; text-align: left;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.72)); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.mmu-bg-badge {
+    position: absolute; top: 4px; left: 4px; padding: 1px 6px; border-radius: 999px;
+    font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(6px);
+}
+.mmu-bg-tile.is-active { box-shadow: 0 0 0 2px var(--cai-accent, #ececf1), inset 0 0 0 1px rgba(0, 0, 0, 0.35); }
+.mmu-bg-tile.is-active::after {
+    content: "\f00c"; font-family: "Font Awesome 6 Free"; font-weight: 900; font-size: 10px;
+    position: absolute; top: 4px; right: 4px; display: grid; place-items: center; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--cai-accent, #ececf1); color: var(--cai-accent-ink, #18181b);
+}
+body.mmu-anim .mmu-bg-tile.is-active::after { animation: mmu-pop-in 0.35s var(--cai-pop) backwards; }
+.mmu-bg-inherit .mmu-bg-img { filter: saturate(0.5) brightness(0.7); }
+.mmu-bg-inherit-icon {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -70%);
+    font-size: 15px; opacity: 0.9; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+.mmu-bg-skeleton { cursor: default; background: linear-gradient(100deg, rgba(127, 127, 127, 0.12) 30%, rgba(127, 127, 127, 0.26) 50%, rgba(127, 127, 127, 0.12) 70%) 0 0 / 300% 100%; }
+body.mmu-anim .mmu-bg-skeleton { animation: mmu-bg-shimmer 1.2s linear infinite; }
+@keyframes mmu-bg-shimmer { to { background-position: -300% 0; } }
+.mmu-bg-empty { grid-column: 1 / -1; padding: 6px 2px; }
+body.mmu-anim .mmu-bg-grid.is-fresh .mmu-bg-tile:not(.mmu-bg-inherit) { animation: mmu-pop-in 0.35s var(--cai-pop) backwards; }
+body.mmu-anim .mmu-bg-grid.is-fresh .mmu-bg-tile:nth-child(2) { animation-delay: 0.02s; }
+body.mmu-anim .mmu-bg-grid.is-fresh .mmu-bg-tile:nth-child(3) { animation-delay: 0.04s; }
+body.mmu-anim .mmu-bg-grid.is-fresh .mmu-bg-tile:nth-child(4) { animation-delay: 0.06s; }
+body.mmu-anim .mmu-bg-grid.is-fresh .mmu-bg-tile:nth-child(5) { animation-delay: 0.08s; }
+body.mmu-anim .mmu-bg-grid.is-fresh .mmu-bg-tile:nth-child(6) { animation-delay: 0.10s; }
+body.mmu-anim .mmu-bg-grid.is-fresh .mmu-bg-tile:nth-child(n+7) { animation-delay: 0.12s; }
+body.mmu-anim .mmu-ct.is-opening .mmu-bg-inherit { animation: mmu-pop-in 0.35s var(--cai-pop) backwards; }
+
 /* Liquid Glass: popups, drawers and toasts stay frosted (readable) even with SillyTavern's "No Blur Effect" */
 body.mmu-on[data-mmu-mode="glass"] dialog.popup,
 body.mmu-on[data-mmu-mode="glass"] .drawer-content,
