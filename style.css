@@ -86,8 +86,8 @@ body.mmu-on.mmu-font #options,
 body.mmu-on.mmu-font #extensionsMenu {
     font-family: var(--cai-font) !important;
 }
-body.mmu-on #bg1,
-body.mmu-on #bg_custom {
+body.mmu-on:not([data-mmu-mode="glass"]) #bg1,
+body.mmu-on:not([data-mmu-mode="glass"]) #bg_custom {
     background-image: none !important;
     background-color: var(--cai-bg) !important;
 }
@@ -932,3 +932,160 @@ body.mmu-preview-lines #chat .welcomeRecent .recentChatList .recentChat .chatMes
 @keyframes mmu-preview-saved { 0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); } 100% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); } }
 dialog.popup.mmu-preview-popup h3 { margin: 0 0 4px; }
 dialog.popup.mmu-preview-popup .mmu-popup-hint { margin: 0 0 6px; opacity: 0.7; font-size: 0.9em; }
+
+/* ==========================================================================
+   12. Liquid Glass appearance
+   Your SillyTavern background stays visible; chat bubbles, the composer,
+   bars and panels become frosted glass. backdrop-filter blurs whatever is
+   behind each surface, so the glass changes colour as you scroll over the
+   background; lib/glass.js adds an overall tint and a readability floor.
+   ========================================================================== */
+body.mmu-on[data-mmu-mode="glass"] {
+    --mmu-glass-a: max(var(--mmu-glass-alpha, 0.35), var(--mmu-glass-floor, 0));
+    --mmu-glass-panel-a: min(0.9, calc(var(--mmu-glass-a) + 0.38));
+    --mmu-glass-fx: blur(var(--mmu-glass-blur, 16px)) saturate(170%) brightness(1.05);
+    --mmu-glass-fill: rgba(var(--mmu-glass-rgb, 22, 24, 32), var(--mmu-glass-a));
+    --mmu-glass-sheet: linear-gradient(160deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0) 68%, rgba(255, 255, 255, 0.06));
+    --mmu-glass-rim: rgba(255, 255, 255, 0.17);
+    --mmu-glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), inset 0 -1px 0 rgba(255, 255, 255, 0.05), inset 0 0 22px rgba(var(--mmu-glass-glow, 205, 225, 255), 0.07), 0 10px 28px rgba(0, 0, 0, 0.28);
+    --cai-bg: rgba(var(--mmu-glass-rgb, 22, 24, 32), var(--mmu-glass-panel-a));
+    --cai-bot: rgba(255, 255, 255, 0.08);
+    --cai-user: rgba(255, 255, 255, 0.15);
+    --cai-text: #f6f6f9;
+    --cai-muted: rgba(236, 236, 244, 0.74);
+    --cai-accent: #ffffff;
+    --cai-accent-ink: #15161b;
+    --cai-line: rgba(255, 255, 255, 0.14);
+    --cai-line-strong: rgba(255, 255, 255, 0.3);
+    --cai-glow: rgba(var(--mmu-glass-glow, 205, 225, 255), 0.5);
+    --mmu-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+}
+
+/* Keep the background visible: the base theme replaces it with a flat colour */
+body.mmu-on[data-mmu-mode="glass"] #sheld,
+body.mmu-on[data-mmu-mode="glass"] #chat,
+body.mmu-on[data-mmu-mode="glass"] #top-settings-holder,
+body.mmu-on[data-mmu-mode="glass"] #form_sheld,
+body.mmu-on[data-mmu-mode="glass"] #chat .welcomePanel {
+    background: transparent !important;
+}
+/* SillyTavern's own panels and popups follow the glass through its theme variables */
+body.mmu-on.mmu-override-colors[data-mmu-mode="glass"] {
+    --SmartThemeBlurTintColor: rgba(var(--mmu-glass-rgb, 22, 24, 32), var(--mmu-glass-panel-a)) !important;
+    --SmartThemeChatTintColor: transparent !important;
+    --SmartThemeBlurStrength: calc(var(--mmu-glass-blur, 16px) + 6px) !important;
+    --SmartThemeBorderColor: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* The glass surface */
+body.mmu-on[data-mmu-mode="glass"] #top-bar,
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .mes_text,
+body.mmu-on[data-mmu-mode="glass"] #send_form #nonQRFormItems,
+body.mmu-on[data-mmu-mode="glass"] #chat .welcomeRecent .recentChatList .recentChat,
+body.mmu-on[data-mmu-mode="glass"] #chat .welcomeRecent .recentChatList .showMoreChats,
+body.mmu-on[data-mmu-mode="glass"] #chat .welcomePanel .welcomeShortcuts .menu_button:not(.openTemporaryChat),
+body.mmu-on[data-mmu-mode="glass"] #chat .welcomePanel .welcomeHeaderTitle .mes_button i,
+body.mmu-on[data-mmu-mode="glass"] #chat .mes_text .drawer-opener,
+body.mmu-on[data-mmu-mode="glass"] #chat .mes_reasoning_header,
+body.mmu-on[data-mmu-mode="glass"] #qr--bar > .qr--buttons .qr--button,
+body.mmu-on[data-mmu-mode="glass"] #options,
+body.mmu-on[data-mmu-mode="glass"] #extensionsMenu,
+body.mmu-on[data-mmu-mode="glass"] #mmu-jump,
+body.mmu-on[data-mmu-mode="glass"] #mmu-pull-tab,
+body.mmu-on[data-mmu-mode="glass"] #mmu-undo-chip,
+body.mmu-on[data-mmu-mode="glass"] #mmu-enhance-menu,
+body.mmu-on[data-mmu-mode="glass"] #mmu-slider-lock:not(.is-unlocked) {
+    background: var(--mmu-glass-sheet), var(--mmu-glass-fill) !important;
+    backdrop-filter: var(--mmu-glass-fx) !important;
+    -webkit-backdrop-filter: var(--mmu-glass-fx) !important;
+    border: 1px solid var(--mmu-glass-rim) !important;
+    box-shadow: var(--mmu-glass-shadow) !important;
+}
+body.mmu-on[data-mmu-mode="glass"] #top-bar { border-width: 0 0 1px !important; border-radius: 0 0 20px 20px; }
+
+/* Bubbles: your messages a touch brighter, a light rim that catches the background's colour */
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .mes_text {
+    position: relative;
+    color: var(--cai-text) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+body.mmu-on[data-mmu-mode="glass"] #chat .mes[is_user="true"] .mes_text {
+    background: var(--mmu-glass-sheet), linear-gradient(rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.07)), var(--mmu-glass-fill) !important;
+}
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .mes_text::before,
+body.mmu-on[data-mmu-mode="glass"] #send_form #nonQRFormItems::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(145deg, rgba(var(--mmu-glass-glow, 205, 225, 255), 0.8), rgba(255, 255, 255, 0.14) 28%, rgba(255, 255, 255, 0) 55%, rgba(var(--mmu-glass-glow, 205, 225, 255), 0.4));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .mes_text em,
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .mes_text i { color: var(--cai-muted) !important; }
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .mes_text:has(textarea) { text-shadow: none; }
+
+/* Text that sits directly on the background */
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .name_text,
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .mes_buttons,
+body.mmu-on[data-mmu-mode="glass"] #chat .welcomePanel::before,
+body.mmu-on[data-mmu-mode="glass"] #chat .welcomePanel .recentChatsTitle,
+body.mmu-on[data-mmu-mode="glass"] #chat .welcomePanel .welcomeHeaderVersionDisplay {
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+}
+body.mmu-on[data-mmu-mode="glass"] #chat .mes .avatar img { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 4px 12px rgba(0, 0, 0, 0.35); }
+
+/* Composer: glass pill, solid round send button */
+body.mmu-on[data-mmu-mode="glass"] #send_form #send_textarea { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
+body.mmu-on[data-mmu-mode="glass"] #send_form #send_textarea::placeholder { color: rgba(240, 240, 248, 0.7); }
+body.mmu-on[data-mmu-mode="glass"] #send_form #rightSendForm > #send_but,
+body.mmu-on[data-mmu-mode="glass"] #send_form #mes_stop i {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4), 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Colorful chat layout on glass: tinted glass instead of solid colour */
+body.mmu-on[data-mmu-mode="glass"][data-mmu-chat="colorful"] #chat .mes[is_user="true"] .mes_text {
+    background: var(--mmu-glass-sheet), color-mix(in srgb, var(--mmu-accent, #8b7cf6) calc(var(--mmu-glass-a) * 120%), transparent) !important;
+    border-color: color-mix(in srgb, var(--mmu-accent, #8b7cf6) 55%, rgba(255, 255, 255, 0.4)) !important;
+}
+body.mmu-on[data-mmu-mode="glass"][data-mmu-chat="colorful"] #chat .mes[is_user="false"] .mes_text {
+    background: var(--mmu-glass-sheet), color-mix(in srgb, var(--mmu-char) 22%, var(--mmu-glass-fill)) !important;
+    border-color: color-mix(in srgb, var(--mmu-char) 50%, rgba(255, 255, 255, 0.25)) !important;
+}
+
+/* Persona and character editors and their sheets become frosted panels */
+body.mmu-on[data-mmu-mode="glass"] #mp-drawer.drawer-content,
+body.mmu-on[data-mmu-mode="glass"] .mp-sheet,
+body.mmu-on[data-mmu-mode="glass"] .mc-sheet,
+body.mmu-on[data-mmu-mode="glass"] .mp-menu,
+body.mmu-on[data-mmu-mode="glass"] .mc-menu {
+    backdrop-filter: blur(calc(var(--mmu-glass-blur, 16px) + 10px)) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(calc(var(--mmu-glass-blur, 16px) + 10px)) saturate(160%) !important;
+}
+
+/* A light sweep across the newest message when it arrives */
+@keyframes mmu-glass-sheen { from { background-position: 160% 0; } to { background-position: -70% 0; } }
+body.mmu-anim[data-mmu-mode="glass"] #chat .mes.last_mes:not(.mmu-thinking) .mes_text::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.16) 48%, rgba(255, 255, 255, 0.04) 54%, transparent 64%) no-repeat;
+    background-size: 260% 100%;
+    animation: mmu-glass-sheen 1.6s var(--cai-smooth) 0.2s both;
+}
+
+/* Settings: glass controls only while Liquid Glass is selected */
+body:not([data-mmu-mode="glass"]) #mmu-settings .mmu-glass-options { display: none; }
+#mmu-settings .mmu-glass-options { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px; border-radius: 12px; border: 1px dashed var(--SmartThemeBorderColor, rgba(255,255,255,0.15)); }
+
+/* Thinking placeholder: hide the literal "..." completely (a text shadow would still show it) */
+body.mmu-think #chat .mes.mmu-thinking .mes_text,
+body.mmu-think #chat .mes.mmu-thinking .mes_text * { text-shadow: none !important; }
+body.mmu-on[data-mmu-mode="glass"].mmu-think #chat .mes.mmu-thinking .mes_text,
+body.mmu-on[data-mmu-mode="glass"].mmu-think #chat .mes.mmu-thinking .mes_text * { color: transparent !important; }

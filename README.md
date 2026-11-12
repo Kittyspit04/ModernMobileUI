@@ -33,7 +33,15 @@ you are connected to.
 - Top icon bar that fits the screen width, rounded drawers, panels, popup menus and toasts.
 - Restyled home screen: greeting line, round shortcut buttons, recent-chat cards.
 - Quick Reply buttons as chips, Mobilyze widgets recoloured to match.
-- **Appearance modes**: Zinc (dark grey), Midnight (pure black for OLED screens) and Light.
+- **Appearance modes**: Zinc (dark grey), Midnight (pure black for OLED screens), Light and Liquid Glass.
+- **Liquid Glass**: a fourth appearance mode that keeps your SillyTavern background visible and turns the chat
+  bubbles, composer, top bar, menus and panels into frosted glass with light rims. Because each surface blurs
+  what is behind it, the glass shifts colour as you scroll over the background. The extension also samples
+  the background and tints the glass and its rims with its colours, and it raises the minimum opacity on very
+  bright backgrounds so text stays readable. Sliders for **glass opacity** (5 to 90 %) and **blur**, plus a
+  switch for the background tint. Pick the background in SillyTavern's Backgrounds panel; chat backgrounds
+  work too. The newest message gets a short light sweep when it arrives. Glass keeps its blur even with
+  SillyTavern's "No Blur Effect" (Fast UI) option on; set the blur slider to 0 if scrolling feels slow.
 - **Chat layouts**: Minimal (grey bubbles) or Colorful (your bubbles in an accent gradient, each character
   tinted with its own hue, coloured names and avatar rings). Accent colour is a picker.
 - Adjustable bubble roundness, avatar size, name badge text, home greeting, font, and whether the
@@ -121,6 +129,7 @@ Everything is kept in `extension_settings.modernMobileUI` in your SillyTavern us
 - `lib/enhance.js` – composer buttons, prompts, typing effect, undo, slash command.
 - `lib/sliderlock.js` – the lock, the floating pill and the hint.
 - `lib/layout.js` – auto-hiding bar, pull-tab, edge swipe, message navigation, tablet width, density.
+- `lib/glass.js` – Liquid Glass: samples the background for tint, rim colour and readability floor.
 - `lib/welcome.js` – start screen: hide greeting/shortcuts, preview clean-up with display regex and custom rules.
 - `ui/settings.js` – the settings block in the Extensions panel.
 - `style.css` – tokens, keyframes, base theme, colourful layout, motion layer, slider lock, settings styles.

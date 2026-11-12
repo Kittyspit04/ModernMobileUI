@@ -8,6 +8,7 @@ import { mount as mountSliderLock } from './lib/sliderlock.js';
 import { mount as mountSettings } from './ui/settings.js';
 import { mount as mountLayout, apply as applyLayout } from './lib/layout.js';
 import { mount as mountWelcome, apply as applyWelcome } from './lib/welcome.js';
+import { mount as mountGlass } from './lib/glass.js';
 import { events } from './lib/st.js';
 
 function boot() {
@@ -18,6 +19,7 @@ function boot() {
     mountSliderLock();
     mountLayout();
     mountWelcome();
+    mountGlass();
     mountSettings();
     registerSlashCommands();
 
