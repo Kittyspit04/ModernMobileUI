@@ -1,0 +1,12 @@
+{
+    "display_name": "Modern Mobile UI",
+    "loading_order": 90,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "Kittyspit04",
+    "version": "1.0.0",
+    "homePage": "https://github.com/Kittyspit04/ModernMobileUI",
+    "auto_update": true
+}

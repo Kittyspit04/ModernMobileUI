@@ -1,0 +1,699 @@
+/* ==========================================================================
+   Modern Mobile UI — stylesheet
+   Everything is scoped to `body.mmu-on` (theme) and `body.mmu-anim`
+   (motion), which the extension toggles from its settings. No media
+   queries: the extension decides when the theme is active.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Tokens
+   -------------------------------------------------------------------------- */
+body.mmu-on {
+    --cai-bg: #18181b;
+    --cai-bot: #26272b;
+    --cai-user: #3a3b40;
+    --cai-text: #ececf1;
+    --cai-muted: #a1a1aa;
+    --cai-accent: #ececf1;
+    --cai-accent-ink: #18181b;
+    --cai-line: rgba(255, 255, 255, 0.07);
+    --cai-line-strong: rgba(255, 255, 255, 0.16);
+    --cai-glow: rgba(236, 236, 241, 0.40);
+    --cai-radius: var(--mmu-radius, 18px);
+    --cai-avatar: var(--mmu-avatar, 34px);
+    --cai-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --cai-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --cai-font: var(--mmu-font, 'Onest', 'Inter', system-ui, sans-serif);
+    --mmu-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    --mmu-dur: 0.4s;
+}
+body.mmu-on[data-mmu-mode="midnight"] {
+    --cai-bg: #000000;
+    --cai-bot: #141416;
+    --cai-user: #232326;
+    --cai-line: rgba(255, 255, 255, 0.09);
+    --cai-line-strong: rgba(255, 255, 255, 0.2);
+    --mmu-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+body.mmu-on[data-mmu-mode="light"] {
+    --cai-bg: #f4f4f5;
+    --cai-bot: #ffffff;
+    --cai-user: #e4e4e7;
+    --cai-text: #18181b;
+    --cai-muted: #71717a;
+    --cai-accent: #18181b;
+    --cai-accent-ink: #ffffff;
+    --cai-line: rgba(0, 0, 0, 0.08);
+    --cai-line-strong: rgba(0, 0, 0, 0.18);
+    --cai-glow: rgba(24, 24, 27, 0.25);
+    --mmu-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+body.mmu-on[data-mmu-motion="subtle"] { --mmu-dur: 0.25s; --cai-pop: cubic-bezier(0.3, 1.2, 0.6, 1); }
+body.mmu-on[data-mmu-motion="lively"] { --mmu-dur: 0.55s; --cai-pop: cubic-bezier(0.34, 1.9, 0.64, 1); }
+
+/* --------------------------------------------------------------------------
+   Keyframes
+   -------------------------------------------------------------------------- */
+@keyframes mmu-msg-in   { from { opacity: 0; transform: translateY(14px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes mmu-pop-in   { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: scale(1); } }
+@keyframes mmu-rise     { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes mmu-fade     { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mmu-drop     { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes mmu-slide-l  { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+@keyframes mmu-tab-pop  { from { transform: scale(0.7); } to { transform: scale(1); } }
+@keyframes mmu-word-in  { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: none; } }
+@keyframes mmu-ring     { 0% { box-shadow: 0 0 0 0 var(--cai-glow); } 70%, 100% { box-shadow: 0 0 0 9px rgba(236, 236, 241, 0); } }
+@keyframes mmu-breathe  { 0%, 100% { transform: scale(0.55); opacity: 0.4; } 50% { transform: scale(1); opacity: 1; } }
+@keyframes mmu-pulse    { 50% { opacity: 0.5; } }
+@keyframes mmu-dots     { 0%, 60%, 100% { background-position: 0% 70%, 50% 70%, 100% 70%; } 15% { background-position: 0% 0%, 50% 70%, 100% 70%; } 30% { background-position: 0% 70%, 50% 0%, 100% 70%; } 45% { background-position: 0% 70%, 50% 70%, 100% 0%; } }
+@keyframes mmu-glow     { 0%, 100% { box-shadow: 0 0 0 0 rgba(236, 236, 241, 0.30); border-color: var(--cai-line-strong); } 50% { box-shadow: 0 0 0 6px rgba(236, 236, 241, 0); border-color: var(--cai-line); } }
+@keyframes mmu-sparkle  { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.35) rotate(18deg); } }
+@keyframes mmu-shake    { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-4px); } 40%, 60% { transform: translateX(4px); } }
+@keyframes mmu-shimmer  { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+@keyframes mmu-nudge    { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px) rotate(-3deg); } 75% { transform: translateX(4px) rotate(3deg); } }
+@keyframes mmu-toast    { from { opacity: 0; transform: translateX(24px) scale(0.96); } to { opacity: 1; transform: none; } }
+
+/* ==========================================================================
+   1. Base theme (from the user's c.ai-style CSS)
+   ========================================================================== */
+body.mmu-on.mmu-font,
+body.mmu-on.mmu-font #sheld,
+body.mmu-on.mmu-font #chat,
+body.mmu-on.mmu-font #send_textarea,
+body.mmu-on.mmu-font .drawer-content,
+body.mmu-on.mmu-font .popup,
+body.mmu-on.mmu-font #options,
+body.mmu-on.mmu-font #extensionsMenu {
+    font-family: var(--cai-font) !important;
+}
+body.mmu-on #bg1,
+body.mmu-on #bg_custom {
+    background-image: none !important;
+    background-color: var(--cai-bg) !important;
+}
+body.mmu-on #sheld,
+body.mmu-on #chat,
+body.mmu-on #top-bar,
+body.mmu-on #top-settings-holder {
+    background: var(--cai-bg) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+body.mmu-on #chat {
+    width: 100% !important;
+    padding: 8px 0 !important;
+    border: none !important;
+}
+body.mmu-on #chat::-webkit-scrollbar { width: 0; }
+
+/* One palette for the whole UI (optional) */
+body.mmu-on.mmu-override-colors {
+    --SmartThemeBodyColor: var(--cai-text) !important;
+    --SmartThemeEmColor: var(--cai-muted) !important;
+    --SmartThemeQuoteColor: var(--cai-text) !important;
+    --SmartThemeBlurTintColor: var(--cai-bg) !important;
+    --SmartThemeChatTintColor: var(--cai-bg) !important;
+    --SmartThemeUserMesBlurTintColor: var(--cai-user) !important;
+    --SmartThemeBotMesBlurTintColor: var(--cai-bot) !important;
+    --SmartThemeBorderColor: var(--cai-line) !important;
+    --SmartThemeShadowColor: transparent !important;
+    --SmartThemeBlurStrength: 0px !important;
+}
+body.mmu-on.mmu-override-colors.mmu-font { --mainFontFamily: var(--cai-font) !important; }
+
+/* ---------- Message rows ---------- */
+body.mmu-on .mes {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 6px 10px !important;
+    gap: 8px;
+}
+body.mmu-on .mes .mesAvatarWrapper { padding: 0 !important; }
+body.mmu-on .mes .avatar,
+body.mmu-on .mes .avatar img {
+    width: var(--cai-avatar) !important;
+    height: var(--cai-avatar) !important;
+    min-width: var(--cai-avatar) !important;
+    border-radius: 50% !important;
+    object-fit: cover;
+}
+body.mmu-on .mes .mesIDDisplay,
+body.mmu-on .mes .mes_timer,
+body.mmu-on .mes .tokenCounterDisplay,
+body.mmu-on .mes .timestamp { display: none !important; }
+
+/* ---------- Name line ---------- */
+body.mmu-on .mes .ch_name { margin-bottom: 4px; align-items: center; }
+body.mmu-on .mes .name_text {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: var(--cai-text) !important;
+}
+body.mmu-on.mmu-name-badge .mes[is_user="false"] .name_text::after {
+    content: var(--mmu-badge-text, "c.ai");
+    margin-left: 6px;
+    padding: 1px 6px;
+    font-size: 10px;
+    font-weight: 500;
+    border-radius: 999px;
+    background: rgba(127, 127, 127, 0.16);
+    color: var(--cai-muted);
+    vertical-align: middle;
+}
+body.mmu-on .mes .mes_buttons { opacity: 1; }
+
+/* ---------- Bubbles ---------- */
+body.mmu-on .mes .mes_text {
+    width: fit-content;
+    max-width: 100% !important;
+    padding: 10px 14px !important;
+    background: var(--cai-bot);
+    color: var(--cai-text) !important;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 4px var(--cai-radius) var(--cai-radius) var(--cai-radius) !important;
+    transition: background-color 0.3s ease;
+}
+body.mmu-on .mes .mes_text p { margin: 0 0 0.6em; }
+body.mmu-on .mes .mes_text p:last-child { margin-bottom: 0; }
+body.mmu-on .mes .mes_text:has(textarea) { width: 100% !important; max-width: 100% !important; }
+body.mmu-on .mes .mes_text em,
+body.mmu-on .mes .mes_text i { color: var(--cai-muted) !important; }
+body.mmu-on .mes .mes_text q { color: var(--cai-text) !important; }
+
+/* User messages: same layout as the character, different tint */
+body.mmu-on .mes[is_user="true"] { flex-direction: row !important; }
+body.mmu-on .mes[is_user="true"] .mesAvatarWrapper { display: flex !important; }
+body.mmu-on .mes[is_user="true"] .mes_block { display: block !important; align-items: initial !important; }
+body.mmu-on .mes[is_user="true"] .mes_text {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    background: var(--cai-user);
+    border-radius: 4px var(--cai-radius) var(--cai-radius) var(--cai-radius) !important;
+}
+
+/* Edit textarea inside a bubble */
+body.mmu-on .mes .mes_text textarea.edit_textarea {
+    background: var(--cai-bg) !important;
+    border: 1px solid var(--cai-line-strong) !important;
+    border-radius: 12px !important;
+    color: var(--cai-text) !important;
+    font-family: inherit !important;
+}
+
+/* Reasoning (thinking) blocks */
+body.mmu-on #chat .mes_reasoning_header { background: var(--cai-bot); color: var(--cai-muted); border-radius: 12px; }
+body.mmu-on #chat .mes_reasoning { border-left-color: var(--cai-user); color: var(--cai-muted); }
+
+/* ==========================================================================
+   2. Colorful chat layout
+   ========================================================================== */
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="true"] .mes_text {
+    background: linear-gradient(135deg, var(--mmu-accent, #8b7cf6), color-mix(in srgb, var(--mmu-accent, #8b7cf6) 70%, #000)) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--mmu-accent, #8b7cf6) 30%, transparent) !important;
+}
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="true"] .mes_text em,
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="true"] .mes_text i { color: rgba(255, 255, 255, 0.78) !important; }
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="true"] .avatar img { box-shadow: 0 0 0 2px var(--mmu-accent, #8b7cf6); }
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="false"] {
+    --mmu-char: hsl(var(--mmu-char-hue, 250) 70% 62%);
+}
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="false"] .mes_text {
+    background: color-mix(in srgb, var(--mmu-char) 12%, var(--cai-bot)) !important;
+    border-left: 2px solid var(--mmu-char) !important;
+}
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="false"] .name_text { color: var(--mmu-char) !important; }
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="false"] .avatar img { box-shadow: 0 0 0 2px var(--mmu-char); }
+body.mmu-on[data-mmu-chat="colorful"] .mes[is_user="false"] .mes_text q { color: color-mix(in srgb, var(--mmu-char) 55%, var(--cai-text)) !important; }
+body.mmu-on[data-mmu-chat="colorful"] #send_form #rightSendForm > #send_but,
+body.mmu-on[data-mmu-chat="colorful"] #send_form #mes_stop i { background-color: var(--mmu-accent, #8b7cf6) !important; color: #fff !important; }
+body.mmu-on[data-mmu-chat="colorful"] #top-settings-holder .drawer-icon.openIcon { background-color: color-mix(in srgb, var(--mmu-accent, #8b7cf6) 28%, var(--cai-bot)); color: #fff; }
+body.mmu-on[data-mmu-chat="colorful"] #chat .welcomePanel .welcomeShortcuts .openTemporaryChat { background-color: var(--mmu-accent, #8b7cf6); color: #fff; }
+body.mmu-on[data-mmu-chat="colorful"] .mmu-enhance-btn:hover { color: var(--mmu-accent, #8b7cf6); }
+
+/* ==========================================================================
+   3. Composer
+   ========================================================================== */
+body.mmu-on #send_form {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    outline: none !important;
+    backdrop-filter: none !important;
+    padding: 4px 10px 10px !important;
+}
+body.mmu-on #send_form #nonQRFormItems {
+    align-items: flex-end;
+    column-gap: 2px;
+    padding: 5px 6px;
+    background: var(--cai-bot);
+    border: 1px solid var(--cai-line);
+    border-radius: 26px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+body.mmu-on #send_form:has(#send_textarea:focus) #nonQRFormItems {
+    border-color: var(--cai-line-strong);
+    box-shadow: 0 0 0 3px rgba(127, 127, 127, 0.08);
+}
+body.mmu-on #send_form #send_textarea {
+    padding: 7px 6px;
+    font-size: 16px;
+    line-height: 1.35;
+    color: var(--cai-text);
+    background: transparent;
+    border: none;
+    resize: none;
+}
+body.mmu-on #send_form #send_textarea::placeholder { color: var(--cai-muted); opacity: 0.8; }
+
+/* Composer icons */
+body.mmu-on #send_form #leftSendForm,
+body.mmu-on #send_form #rightSendForm { flex-wrap: nowrap; align-items: center; gap: 2px; padding: 0; }
+body.mmu-on #send_form #leftSendForm > div,
+body.mmu-on #send_form #rightSendForm > div:not(.mes_stop) {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; margin: 0;
+    font-size: 17px; border-radius: 50%;
+    color: var(--cai-muted); opacity: 1; text-shadow: none;
+    transition: transform 0.25s var(--cai-pop), background-color 0.2s ease, color 0.2s ease;
+}
+body.mmu-on #send_form #leftSendForm > div:active,
+body.mmu-on #send_form #rightSendForm > div:not(.mes_stop):active {
+    transform: scale(0.85);
+    background-color: rgba(127, 127, 127, 0.16);
+    color: var(--cai-text);
+}
+/* Send: filled circle with an up-arrow */
+body.mmu-on #send_form #rightSendForm > #send_but {
+    background-color: var(--cai-accent);
+    color: var(--cai-accent-ink);
+    font-size: 15px;
+}
+body.mmu-on #send_form #rightSendForm > #send_but:active { background-color: var(--cai-accent); color: var(--cai-accent-ink); }
+body.mmu-on #send_form #send_but::before { content: "\f062"; }
+/* Stop: same circle, square glyph */
+body.mmu-on #send_form #mes_stop { padding: 0; opacity: 1; }
+body.mmu-on #send_form #mes_stop i {
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--cai-accent); color: var(--cai-accent-ink);
+    font-size: 13px; text-shadow: none;
+}
+body.mmu-on #send_form #mes_stop i::before { content: "\f04d"; }
+
+/* Enhance buttons */
+.mmu-enhance-btn { cursor: pointer; }
+body.mmu-on .mmu-enhance-btn { font-size: 15px !important; }
+.mmu-enhance-btn.is-busy { pointer-events: none; opacity: 0.6; }
+body.mmu-enhancing #mmu_enhance,
+body.mmu-enhancing #mmu_polish { color: var(--cai-text, inherit); }
+body.mmu-enhancing #send_form #nonQRFormItems { animation: mmu-glow 1.2s ease-in-out infinite; }
+body.mmu-enhancing #send_form #send_textarea { animation: mmu-pulse 1.1s ease-in-out infinite; }
+body.mmu-enhancing #mmu_enhance.is-busy,
+body.mmu-enhancing #mmu_polish.is-busy { opacity: 1; animation: mmu-sparkle 0.9s ease-in-out infinite; }
+#send_textarea.mmu-shake { animation: mmu-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+
+/* Undo chip above the composer */
+#mmu-undo-chip {
+    display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+    margin: 0 0 6px 8px; padding: 6px 12px;
+    border: 1px solid var(--cai-line-strong, rgba(255,255,255,0.16)); border-radius: 999px;
+    background: var(--cai-bot, #26272b); color: var(--cai-text, #ececf1);
+    font: 600 12.5px var(--cai-font, inherit); cursor: pointer;
+    opacity: 0; transform: translateY(6px) scale(0.96);
+    transition: opacity 0.25s ease, transform 0.35s var(--cai-pop, ease);
+}
+#mmu-undo-chip.is-open { opacity: 1; transform: none; }
+#mmu-undo-chip i { color: var(--cai-muted, #a1a1aa); font-size: 12px; }
+#mmu-undo-chip:active { transform: scale(0.94); }
+
+/* ==========================================================================
+   4. Message action icons, top bar, menus, panels
+   ========================================================================== */
+body.mmu-on #chat .mes .mes_buttons .mes_button,
+body.mmu-on #chat .mes .mes_buttons .extraMesButtonsHint {
+    padding: 6px; font-size: 13px; border-radius: 50%;
+    color: var(--cai-muted); opacity: 0.75; text-shadow: none;
+    transition: transform 0.25s var(--cai-pop), background-color 0.2s ease, opacity 0.2s ease;
+}
+body.mmu-on #chat .mes .mes_buttons .mes_button:active,
+body.mmu-on #chat .mes .mes_buttons .extraMesButtonsHint:active {
+    transform: scale(0.82); background-color: rgba(127, 127, 127, 0.16); opacity: 1;
+}
+body.mmu-on #chat .mes .mes_edit::before { content: "\f304"; }
+
+/* Top icon bar */
+body.mmu-on #top-bar { box-shadow: none !important; }
+body.mmu-on #top-settings-holder { align-items: center; padding: 0 6px; }
+body.mmu-on #top-settings-holder > * { flex: 1 1 0; min-width: 0; }
+body.mmu-on #top-settings-holder .drawer-icon {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; max-width: 40px; height: 34px; margin: 0 auto; padding: 0;
+    font-size: 17px; border-radius: 11px;
+    color: var(--cai-muted); text-shadow: none;
+    transition: transform 0.3s var(--cai-pop), background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+body.mmu-on #top-settings-holder .drawer-icon.closedIcon { opacity: 0.8; }
+body.mmu-on #top-settings-holder .drawer-icon.openIcon { opacity: 1; color: var(--cai-text); background-color: var(--cai-user); }
+body.mmu-on #top-settings-holder .drawer-icon:active { transform: scale(0.86); }
+
+/* Drawers */
+body.mmu-on .drawer-content {
+    border-radius: 0 0 20px 20px;
+    box-shadow: var(--mmu-shadow);
+    border-color: var(--cai-line);
+}
+body.mmu-on #extensions_settings .inline-drawer-toggle.inline-drawer-header,
+body.mmu-on #extensions_settings2 .inline-drawer-toggle.inline-drawer-header,
+body.mmu-on #user-settings-block h4,
+body.mmu-on .standoutHeader {
+    background-image: none !important;
+    background-color: var(--cai-bot) !important;
+    border: 1px solid var(--cai-line) !important;
+    border-radius: 14px !important;
+    padding: 9px 12px !important;
+}
+body.mmu-on .inline-drawer-icon { color: var(--cai-muted); }
+body.mmu-on.mmu-override-colors :where(.drawer-content, .popup) .menu_button:where(:not(.redWarningBG, .redOverlayGlow)) {
+    background-color: var(--cai-bot); border-color: var(--cai-line); border-radius: 10px;
+}
+body.mmu-on.mmu-override-colors :where(.drawer-content, .popup) :is(.text_pole, textarea, select) {
+    background-color: var(--cai-bot); border-color: var(--cai-line); border-radius: 10px;
+}
+body.mmu-on .menu_button { transition: transform 0.25s var(--cai-pop), background-color 0.2s ease, border-color 0.2s ease; }
+body.mmu-on .menu_button:active { transform: scale(0.95); }
+
+/* Range sliders: slimmer, rounder */
+body.mmu-on .drawer-content input[type="range"] { accent-color: var(--cai-accent); height: 22px; }
+
+/* Popup menus (options, extensions) */
+body.mmu-on #options,
+body.mmu-on #extensionsMenu {
+    background-color: var(--cai-bot) !important;
+    border-radius: 16px !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: var(--mmu-shadow) !important;
+}
+body.mmu-on #options .options-content { border-color: var(--cai-line); }
+body.mmu-on #options .options-content a,
+body.mmu-on #extensionsMenu .list-group-item { border-radius: 10px; transition: background-color 0.15s ease, transform 0.25s var(--cai-pop); }
+body.mmu-on #options .options-content a:active,
+body.mmu-on #extensionsMenu .list-group-item:active { transform: scale(0.97); }
+
+/* Popups */
+body.mmu-on dialog.popup {
+    border-radius: 22px;
+    border-color: var(--cai-line-strong);
+    box-shadow: var(--mmu-shadow);
+}
+body.mmu-on dialog.popup .popup-button-ok,
+body.mmu-on dialog.popup .popup-button-cancel,
+body.mmu-on dialog.popup .popup-button-custom { border-radius: 999px; font-weight: 600; }
+
+/* Toasts */
+body.mmu-on #toast-container > div {
+    border-radius: 14px !important;
+    box-shadow: var(--mmu-shadow) !important;
+    font-family: var(--cai-font);
+}
+
+/* ==========================================================================
+   5. Home screen (welcome panel) and recent chats
+   ========================================================================== */
+body.mmu-on #chat .welcomePanel { padding: 16px 12px 6px; gap: 12px; background: transparent !important; border: none !important; }
+body.mmu-on.mmu-greeting #chat .welcomePanel::before {
+    content: var(--mmu-greeting, "Welcome back");
+    font-size: 24px; font-weight: 700; line-height: 1.2; color: var(--cai-text);
+}
+body.mmu-on #chat .welcomePanel .welcomeHeaderTitle { gap: 8px; }
+body.mmu-on #chat .welcomePanel .welcomeHeaderLogo { width: 22px; height: 22px; opacity: 0.9; }
+body.mmu-on #chat .welcomePanel .welcomeHeaderVersionDisplay {
+    min-width: 0; font-size: 12px; font-weight: 500; color: var(--cai-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+body.mmu-on #chat .welcomePanel .welcomeHeaderTitle .mes_button { padding: 0; opacity: 1; filter: none; }
+body.mmu-on #chat .welcomePanel .welcomeHeaderTitle .mes_button i {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; font-size: 13px; line-height: 1; vertical-align: middle;
+    border-radius: 50%; background: var(--cai-bot); color: var(--cai-muted);
+    transition: transform 0.25s var(--cai-pop), background-color 0.2s ease;
+}
+body.mmu-on #chat .welcomePanel .welcomeHeaderTitle .mes_button:active i { transform: scale(0.85); background: var(--cai-user); }
+body.mmu-on #chat .welcomePanel .showRecentChats i::before { content: "\f078"; }
+body.mmu-on #chat .welcomePanel .hideRecentChats i::before { content: "\f00d"; }
+body.mmu-on #chat .welcomePanel .welcomeHeader { flex-direction: column; align-items: stretch; gap: 14px; }
+body.mmu-on #chat .welcomePanel .welcomeShortcuts { order: -1; flex-wrap: nowrap; justify-content: flex-start; gap: 8px; }
+body.mmu-on #chat .welcomePanel .welcomeShortcutsSeparator { display: none; }
+body.mmu-on #chat .welcomePanel .welcomeShortcuts .menu_button {
+    width: 36px; height: 36px; margin: 0; padding: 0; font-size: 15px;
+    border: 1px solid var(--cai-line); border-radius: 999px;
+    background-color: var(--cai-bot); color: var(--cai-muted); filter: none;
+    transition: transform 0.25s var(--cai-pop), background-color 0.2s ease;
+}
+body.mmu-on #chat .welcomePanel .welcomeShortcuts .menu_button:active { transform: scale(0.9); }
+body.mmu-on #chat .welcomePanel .welcomeShortcuts .openTemporaryChat {
+    order: -1; width: auto; margin-right: auto; padding: 0 16px; gap: 8px;
+    font-size: 14px; font-weight: 600; white-space: nowrap;
+    border-color: transparent; background-color: var(--cai-accent); color: var(--cai-accent-ink);
+}
+body.mmu-on #chat .welcomePanel .recentChatsTitle { font-size: 17px; font-weight: 700; color: var(--cai-text); }
+body.mmu-on #chat .welcomeRecent .recentChatList { gap: 8px; }
+body.mmu-on #chat .welcomeRecent .recentChatList .recentChat {
+    padding: 10px 12px; gap: 12px;
+    border: 1px solid var(--cai-line); border-radius: 16px; background-color: var(--cai-bot);
+    transition: transform 0.25s var(--cai-pop), background-color 0.2s ease;
+}
+body.mmu-on #chat .welcomeRecent .recentChatList .recentChat:hover { background-color: var(--cai-bot); }
+body.mmu-on #chat .welcomeRecent .recentChatList .recentChat:active { transform: scale(0.98); background-color: var(--cai-user); }
+body.mmu-on #chat .welcomeRecent .recentChatList .recentChat:has(.recentChatPinned) { border-color: var(--cai-line-strong); }
+body.mmu-on #chat .welcomeRecent .recentChat .recentChatPinned { top: 4px; left: 6px; color: var(--cai-muted); }
+body.mmu-on #chat .welcomeRecent .recentChat .avatar { flex: 0 0 44px; width: 44px; height: 44px; }
+body.mmu-on #chat .welcomeRecent .recentChat .avatar:not(.avatar_collage) img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+body.mmu-on #chat .welcomeRecent .recentChat .chatName { font-size: 15px; color: var(--cai-muted); }
+body.mmu-on #chat .welcomeRecent .recentChat .characterName { font-weight: 600; color: var(--cai-text); }
+body.mmu-on #chat .welcomeRecent .recentChat .chatDate { font-size: 11px; }
+body.mmu-on #chat .welcomeRecent .recentChat .chatMessage { font-size: 13px; line-height: 1.4; color: var(--cai-muted); }
+body.mmu-on #chat .welcomeRecent .recentChat .chatStats { font-size: 11px; color: var(--cai-muted); }
+body.mmu-on #chat .welcomeRecent .recentChat .fileSize,
+body.mmu-on #chat .welcomeRecent .recentChat .counterBlock::after { display: none; }
+body.mmu-on #chat .welcomeRecent .recentChat .chatActions { gap: 0; }
+body.mmu-on #chat .welcomeRecent .recentChat .chatActions button {
+    width: 28px; height: 28px; margin: 0; padding: 0; font-size: 12px;
+    border: none; border-radius: 50%; background-color: transparent; color: var(--cai-muted); opacity: 0.75; filter: none;
+    transition: transform 0.25s var(--cai-pop), background-color 0.2s ease;
+}
+body.mmu-on #chat .welcomeRecent .recentChat .chatActions button:active { transform: scale(0.85); background-color: rgba(127, 127, 127, 0.16); }
+body.mmu-on #chat .welcomeRecent .recentChat .chatActions .pinChat.active { color: var(--cai-text); opacity: 1; }
+body.mmu-on #chat .welcomeRecent .recentChatList .showMoreChats {
+    width: 48px; height: 30px; margin: 2px 0 0; padding: 0;
+    border: 1px solid var(--cai-line); border-radius: 999px; background-color: var(--cai-bot); color: var(--cai-muted); filter: none;
+    transition: transform 0.35s var(--cai-pop);
+}
+body.mmu-on #chat .mes_text:has(> .flex-container > .drawer-opener) { width: 100% !important; padding: 6px 0 !important; background: transparent !important; border: none !important; }
+body.mmu-on #chat .mes_text > .flex-container:has(> .drawer-opener) { justify-content: center; gap: 8px; }
+body.mmu-on #chat .mes_text .drawer-opener {
+    margin: 0; padding: 8px 14px; gap: 8px; font-size: 13.5px; font-weight: 500;
+    border: 1px solid var(--cai-line); border-radius: 999px; background-color: var(--cai-bot); color: var(--cai-text); filter: none;
+    transition: transform 0.25s var(--cai-pop), background-color 0.2s ease;
+}
+body.mmu-on #chat .mes_text .drawer-opener i { color: var(--cai-muted); }
+body.mmu-on #chat .mes_text .drawer-opener:active { transform: scale(0.94); background-color: var(--cai-user); }
+body.mmu-on #chat#chat:has(> .welcomePanel) .mes :is(.swipe_left, .swipe_right, .swipeRightBlock) { display: none !important; }
+
+/* Quick Reply chips */
+body.mmu-on #qr--bar { justify-content: flex-start; opacity: 1; }
+body.mmu-on #qr--bar:has(.qr--button) { padding: 0 2px 8px; }
+body.mmu-on #qr--bar > .qr--buttons { justify-content: flex-start; gap: 6px; }
+body.mmu-on #qr--bar > .qr--buttons .qr--button {
+    margin: 0; padding: 6px 12px; gap: 6px; font-size: 13px; font-weight: 500; line-height: 1.2;
+    border: 1px solid var(--cai-line); border-radius: 999px; background-color: var(--cai-bot); color: var(--cai-text); filter: none;
+    transition: transform 0.25s var(--cai-pop), background-color 0.2s ease, opacity 0.2s ease;
+}
+body.mmu-on #qr--bar > .qr--buttons .qr--button:active { transform: scale(0.92); background-color: var(--cai-user); }
+body.mmu-on #qr--bar > .qr--buttons .qr--button .qr--button-icon { margin: 0; font-size: 12px; color: var(--cai-muted); }
+
+/* Mobilyze widgets */
+body.mmu-on #mobilyze-pull-tab {
+    background: var(--cai-user) !important; border: 1px solid var(--cai-line) !important; border-top: none !important;
+    color: var(--cai-muted) !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+body.mmu-on #mobilyze-jump-pill {
+    background: var(--cai-bot) !important; border: 1px solid var(--cai-line) !important; border-right: none !important;
+    border-radius: 14px 0 0 14px !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+body.mmu-on .mobilyze-jump-btn { color: var(--cai-muted) !important; text-shadow: none !important; border-color: var(--cai-line) !important; transition: background 0.15s ease, transform 0.25s var(--cai-pop) !important; }
+body.mmu-on .mobilyze-jump-btn:active { background: rgba(127, 127, 127, 0.2) !important; transform: scale(0.85); }
+body.mmu-on.mobilyze-active.mobilyze-wrap-active #chat .swipe_left,
+body.mmu-on.mobilyze-active.mobilyze-wrap-active #chat .swipeRightBlock {
+    background: var(--cai-user) !important; border-color: var(--cai-line) !important;
+    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+body.mmu-on.mobilyze-active.mobilyze-wrap-active #chat .swipe_left,
+body.mmu-on.mobilyze-active.mobilyze-wrap-active #chat .swipe_right,
+body.mmu-on.mobilyze-active.mobilyze-wrap-active #chat .swipes-counter { color: var(--cai-muted) !important; text-shadow: none !important; }
+
+/* Character list cards */
+body.mmu-on #rm_print_characters_block .character_select,
+body.mmu-on #rm_print_characters_block .group_select {
+    border-radius: 14px; transition: transform 0.25s var(--cai-pop), background-color 0.2s ease;
+}
+body.mmu-on #rm_print_characters_block .character_select:active,
+body.mmu-on #rm_print_characters_block .group_select:active { transform: scale(0.98); }
+
+/* ==========================================================================
+   6. Motion layer (body.mmu-anim)
+   ========================================================================== */
+/* New messages rise + fade in */
+body.mmu-anim #chat .mes.last_mes { transform-origin: 0 100%; animation: mmu-msg-in var(--mmu-dur) var(--cai-smooth) backwards; }
+
+/* Thinking bubble with bouncing dots while waiting for the reply */
+body.mmu-anim[data-generating="true"] #chat:has(> .mes.last_mes[is_user="true"])::after {
+    content: ""; flex: 0 0 auto; order: 9999; align-self: flex-start;
+    position: sticky; bottom: 8px; z-index: 5; box-sizing: content-box;
+    width: 34px; height: 14px; margin: 6px 0 12px 10px; padding: 12px 16px;
+    border-radius: 4px var(--cai-radius, 18px) var(--cai-radius, 18px) var(--cai-radius, 18px);
+    background-color: var(--cai-bot, #26272b);
+    background-image:
+        radial-gradient(circle closest-side, var(--cai-muted, #a1a1aa) 90%, transparent),
+        radial-gradient(circle closest-side, var(--cai-muted, #a1a1aa) 90%, transparent),
+        radial-gradient(circle closest-side, var(--cai-muted, #a1a1aa) 90%, transparent);
+    background-repeat: no-repeat; background-size: 8px 8px; background-origin: content-box;
+    background-position: 0% 70%, 50% 70%, 100% 70%;
+    transform-origin: 0 100%;
+    animation: mmu-pop-in 0.45s var(--cai-pop) backwards, mmu-dots 1.3s ease-in-out infinite;
+}
+/* Avatar sonar ring + trailing breathing dot while the character writes */
+body.mmu-anim[data-generating="true"] #chat .mes.last_mes[is_user="false"] .avatar { animation: mmu-ring 1.6s ease-out infinite; border-radius: 50%; }
+body.mmu-anim[data-generating="true"] #chat .mes.last_mes[is_user="false"] .mes_text > p:last-child::after {
+    content: ""; display: inline-block; width: 9px; height: 9px; margin-left: 6px; border-radius: 50%;
+    background: var(--cai-text, currentColor); animation: mmu-breathe 1s ease-in-out infinite;
+}
+body.mmu-anim #chat .mes_reasoning_details[data-state="thinking"] .mes_reasoning_header { animation: mmu-pulse 1.4s ease-in-out infinite; }
+/* Built-in typing indicator extension */
+body.mmu-anim #chat .typing_indicator,
+body.mmu-anim #typing_indicator { animation: mmu-pop-in 0.4s var(--cai-pop) backwards; }
+
+/* Word-by-word reveal (needs Stream Fade-In) */
+body.mmu-word-reveal #chat .mes_text .text_segment,
+body.mmu-word-reveal #chat .mes_reasoning_details[data-state="thinking"] .mes_reasoning .text_segment { animation: mmu-word-in 0.5s var(--cai-smooth) backwards; }
+
+/* Composer buttons pop in/out */
+body.mmu-anim #send_form #rightSendForm > #send_but,
+body.mmu-anim #send_form #mes_stop,
+body.mmu-anim #send_form #rightSendForm > .mmu-enhance-btn { animation: mmu-pop-in 0.35s var(--cai-pop) backwards; }
+body.mmu-anim #send_form #mes_stop i { animation: mmu-ring 1.6s ease-out infinite; }
+
+/* Top bar + drawers */
+body.mmu-anim #top-settings-holder .drawer-icon.openIcon { animation: mmu-tab-pop 0.35s var(--cai-pop); }
+body.mmu-anim .drawer-content.openDrawer { animation: mmu-drop var(--mmu-dur) var(--cai-smooth); }
+body.mmu-anim .drawer-content.openDrawer > * { animation: mmu-fade 0.5s ease backwards; animation-delay: 0.08s; }
+body.mmu-anim .inline-drawer-content { animation: mmu-rise 0.3s var(--cai-smooth) backwards; }
+
+/* Popup menus, popups, toasts */
+body.mmu-anim #options,
+body.mmu-anim #extensionsMenu { animation: mmu-drop 0.3s var(--cai-pop) backwards; transform-origin: bottom left; }
+body.mmu-anim dialog.popup[open] .popup-body { animation: mmu-rise 0.35s var(--cai-smooth) backwards; }
+body.mmu-anim #toast-container > div { animation: mmu-toast 0.4s var(--cai-pop) backwards; }
+
+/* Home screen: greeting, cards stagger in */
+body.mmu-anim #chat .welcomePanel::before { animation: mmu-rise 0.45s var(--cai-smooth) backwards; }
+body.mmu-anim #chat .welcomeRecent .recentChatList .recentChat:not(.flash) { animation: mmu-rise 0.45s var(--cai-smooth) backwards; animation-delay: 0.25s; }
+body.mmu-anim #chat .welcomeRecent .recentChatList .recentChat:nth-child(1) { animation-delay: 0s; }
+body.mmu-anim #chat .welcomeRecent .recentChatList .recentChat:nth-child(2) { animation-delay: 0.05s; }
+body.mmu-anim #chat .welcomeRecent .recentChatList .recentChat:nth-child(3) { animation-delay: 0.1s; }
+body.mmu-anim #chat .welcomeRecent .recentChatList .recentChat:nth-child(4) { animation-delay: 0.15s; }
+body.mmu-anim #chat .welcomeRecent .recentChatList .recentChat:nth-child(5) { animation-delay: 0.2s; }
+body.mmu-anim #chat .welcomePanel .welcomeShortcuts .menu_button { animation: mmu-pop-in 0.4s var(--cai-pop) backwards; }
+body.mmu-anim #chat .welcomePanel .welcomeShortcuts .menu_button:nth-child(2) { animation-delay: 0.04s; }
+body.mmu-anim #chat .welcomePanel .welcomeShortcuts .menu_button:nth-child(3) { animation-delay: 0.08s; }
+body.mmu-anim #chat .welcomePanel .welcomeShortcuts .menu_button:nth-child(4) { animation-delay: 0.12s; }
+body.mmu-anim #chat .welcomePanel .welcomeShortcuts .menu_button:nth-child(5) { animation-delay: 0.16s; }
+
+/* Character list stagger (first dozen) */
+body.mmu-anim #rm_print_characters_block .character_select,
+body.mmu-anim #rm_print_characters_block .group_select { animation: mmu-rise 0.4s var(--cai-smooth) backwards; }
+body.mmu-anim #rm_print_characters_block > :nth-child(2) { animation-delay: 0.03s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(3) { animation-delay: 0.06s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(4) { animation-delay: 0.09s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(5) { animation-delay: 0.12s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(6) { animation-delay: 0.15s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(7) { animation-delay: 0.18s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(8) { animation-delay: 0.21s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(9) { animation-delay: 0.24s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(10) { animation-delay: 0.27s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(11) { animation-delay: 0.3s; }
+body.mmu-anim #rm_print_characters_block > :nth-child(12) { animation-delay: 0.33s; }
+
+/* Swipes and QR chips */
+body.mmu-anim #chat .swipe_left,
+body.mmu-anim #chat .swipe_right { transition: opacity 0.25s ease, transform 0.3s var(--cai-pop); }
+body.mmu-anim #chat .swipe_left:active,
+body.mmu-anim #chat .swipe_right:active { transform: scale(0.85); }
+body.mmu-anim #qr--bar > .qr--buttons .qr--button { animation: mmu-pop-in 0.35s var(--cai-pop) backwards; }
+body.mmu-anim #form_sheld.isExecutingCommandsFromChatInput #nonQRFormItems { animation: mmu-glow 1.2s ease-in-out infinite; }
+body.mmu-anim #form_sheld.isExecutingCommandsFromChatInput #qr--bar .qr--button-icon { animation: mmu-sparkle 0.9s ease-in-out infinite; }
+
+/* Checkbox / toggle feedback */
+body.mmu-anim .checkbox_label input[type="checkbox"] { transition: transform 0.25s var(--cai-pop); }
+body.mmu-anim .checkbox_label input[type="checkbox"]:active { transform: scale(0.85); }
+
+/* ==========================================================================
+   7. Slider lock
+   ========================================================================== */
+body.mmu-sliders-locked input[type="range"]:not([data-mmu-free]):not([data-mmu-free] *) {
+    opacity: 0.55;
+    cursor: not-allowed;
+    touch-action: pan-y;
+}
+#mmu-slider-lock {
+    position: fixed; right: 12px; bottom: calc(var(--bottomFormBlockSize, 56px) + 14px); z-index: 10020;
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 36px; padding: 0 14px 0 12px; border-radius: 999px;
+    border: 1px solid var(--cai-line-strong, rgba(255,255,255,0.16));
+    background: var(--cai-bot, #26272b); color: var(--cai-text, #ececf1);
+    font: 600 12.5px var(--cai-font, system-ui, sans-serif); cursor: pointer;
+    box-shadow: var(--mmu-shadow, 0 10px 30px rgba(0,0,0,.45));
+    opacity: 0; transform: translateY(12px) scale(0.9); pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.4s var(--cai-pop, ease), background-color 0.2s ease;
+}
+#mmu-slider-lock.is-visible { opacity: 1; transform: none; pointer-events: auto; }
+#mmu-slider-lock i { font-size: 12px; color: var(--cai-muted, #a1a1aa); }
+#mmu-slider-lock.is-unlocked { background: var(--cai-accent, #ececf1); color: var(--cai-accent-ink, #18181b); }
+#mmu-slider-lock.is-unlocked i { color: var(--cai-accent-ink, #18181b); }
+#mmu-slider-lock:active { transform: scale(0.92); }
+#mmu-slider-lock.is-nudge { animation: mmu-nudge 0.5s ease; }
+
+/* ==========================================================================
+   8. Settings block in the Extensions panel
+   ========================================================================== */
+#mmu-settings .mmu-settings-body { display: flex; flex-direction: column; gap: 10px; padding: 6px 2px; }
+#mmu-settings .mmu-section { padding: 10px 12px; border: 1px solid var(--SmartThemeBorderColor, rgba(255,255,255,0.1)); border-radius: 14px; display: flex; flex-direction: column; gap: 6px; }
+#mmu-settings .mmu-section-title { display: flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 4px; }
+#mmu-settings .mmu-section-title i { opacity: 0.7; font-size: 12px; }
+#mmu-settings .mmu-opt { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+#mmu-settings .mmu-opt > span { flex: 1 1 0; min-width: 0; }
+#mmu-settings .mmu-opt-hint { flex-basis: 100%; opacity: 0.65; font-size: 11.5px; padding-left: 26px; }
+#mmu-settings .mmu-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+#mmu-settings .mmu-row-col { flex-direction: column; align-items: stretch; }
+#mmu-settings .mmu-row-label { font-size: 13px; opacity: 0.9; }
+#mmu-settings .mmu-select, #mmu-settings .mmu-text { max-width: 55%; margin: 0; }
+#mmu-settings .mmu-textarea { width: 100%; margin: 0; font-size: 12.5px; }
+#mmu-settings .mmu-range-wrap { display: flex; align-items: center; gap: 8px; width: 55%; }
+#mmu-settings .mmu-range-wrap input[type="range"] { flex: 1; margin: 0; }
+#mmu-settings .mmu-range-value { min-width: 42px; text-align: right; font-size: 12px; opacity: 0.8; }
+#mmu-settings .mmu-color { width: 42px; height: 30px; padding: 0; border: none; background: transparent; cursor: pointer; }
+#mmu-settings .mmu-small-btn { align-self: flex-start; padding: 4px 12px; font-size: 12px; }
+#mmu-settings .mmu-footer { display: flex; align-items: center; justify-content: space-between; padding: 4px 2px; }
+#mmu-settings .mmu-link { font-size: 12px; opacity: 0.7; }
+
+/* ==========================================================================
+   9. Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    body.mmu-anim *, body.mmu-anim *::before, body.mmu-anim *::after { animation: none !important; }
+    #mmu-slider-lock, #mmu-undo-chip { transition: none; }
+}
