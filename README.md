@@ -42,6 +42,13 @@ you are connected to.
   switch for the background tint. Pick the background in SillyTavern's Backgrounds panel; chat backgrounds
   work too. The newest message gets a short light sweep when it arrives. Glass keeps its blur even with
   SillyTavern's "No Blur Effect" (Fast UI) option on; set the blur slider to 0 if scrolling feels slow.
+- **Themes per chat**: every chat and every character (or group) can have its own appearance, chat layout and
+  Liquid Glass opacity. The default appearance is used for the main UI (start screen) and for every chat
+  without its own theme. Order: this chat, then this character, then the default. Choose it with **Chat
+  theme** in the wand menu next to the input box, with the button in the settings, or with `/chat-theme`
+  (`/chat-theme glass`, `/chat-theme scope=character midnight`, `/chat-theme default`). A chat's theme is
+  saved inside the chat file, so it survives renames, backups and other devices; character themes are saved
+  in the extension settings. Switching between chats with different themes cross-fades smoothly.
 - **Chat layouts**: Minimal (grey bubbles) or Colorful (your bubbles in an accent gradient, each character
   tinted with its own hue, coloured names and avatar rings). Accent colour is a picker.
 - Adjustable bubble roundness, avatar size, name badge text, home greeting, font, and whether the
@@ -129,6 +136,7 @@ Everything is kept in `extension_settings.modernMobileUI` in your SillyTavern us
 - `lib/enhance.js` – composer buttons, prompts, typing effect, undo, slash command.
 - `lib/sliderlock.js` – the lock, the floating pill and the hint.
 - `lib/layout.js` – auto-hiding bar, pull-tab, edge swipe, message navigation, tablet width, density.
+- `lib/chattheme.js` – per-chat and per-character theme storage and resolution; `ui/chattheme.js` – the picker, wand item, `/chat-theme`.
 - `lib/glass.js` – Liquid Glass: samples the background for tint, rim colour and readability floor.
 - `lib/welcome.js` – start screen: hide greeting/shortcuts, preview clean-up with display regex and custom rules.
 - `ui/settings.js` – the settings block in the Extensions panel.

@@ -8,6 +8,8 @@ import { updateVisibility as refreshEnhanceButtons } from '../lib/enhance.js';
 import { refresh as refreshSliderLock, setUnlocked } from '../lib/sliderlock.js';
 import { apply as applyLayout, ensureRevealTrigger, mobilyzeDetected } from '../lib/layout.js';
 import { apply as applyWelcome, customPreviewCount, clearCustomPreviews } from '../lib/welcome.js';
+import { characterThemeCount, clearCharacterThemes, chatOpen, resolve as resolveChatTheme, modeLabel } from '../lib/chattheme.js';
+import { openPicker as openChatThemePicker } from './chattheme.js';
 import { t } from '../lib/st.js';
 
 function el(tag, attrs = {}, ...children) {
@@ -78,7 +80,7 @@ export function mount() {
             section(t`Theme`, 'fa-palette',
                 checkbox('enabled', t`Enable Modern Mobile UI`),
                 checkbox('desktopToo', t`Also apply on desktop widths`, t`By default the theme only kicks in on phone and tablet sized screens`),
-                selectRow('mode', t`Appearance`, [{ value: 'zinc', label: t`Zinc (dark grey)` }, { value: 'midnight', label: t`Midnight (pure black, OLED)` }, { value: 'light', label: t`Light` }, { value: 'glass', label: t`Liquid Glass (your background)` }]),
+                selectRow('mode', t`Default appearance`, [{ value: 'zinc', label: t`Zinc (dark grey)` }, { value: 'midnight', label: t`Midnight (pure black, OLED)` }, { value: 'light', label: t`Light` }, { value: 'glass', label: t`Liquid Glass (your background)` }]),
                 el('div', { class: 'mmu-glass-options' },
                     rangeRow('glass.opacity', t`Glass opacity`, { min: 5, max: 90, unit: '%' }),
                     rangeRow('glass.blur', t`Glass blur`, { min: 0, max: 40, unit: 'px' }),
@@ -95,6 +97,13 @@ export function mount() {
                 textRow('nameBadge', t`Badge text`, { placeholder: 'c.ai' }),
                 textRow('homeGreeting', t`Home screen greeting`, { placeholder: t`Welcome back` }),
                 checkbox('overrideThemeColors', t`Recolour panels, popups and inputs too`, t`Turn off to keep your UI theme colour pickers in charge`),
+            ),
+            section(t`Themes per chat`, 'fa-palette',
+                checkbox('perChatThemes', t`Let chats and characters have their own theme`, t`The default appearance above is used for the main UI and every chat without its own theme`),
+                el('div', { class: 'mmu-ct-settings-status', id: 'mmu-ct-settings-status' }),
+                el('div', { class: 'menu_button mmu-small-btn', text: t`Theme for the open chat…`, onClick: () => { void openChatThemePicker(); } }),
+                el('small', { class: 'mmu-opt-hint mmu-opt-hint-flush', text: t`Also in the wand menu next to the input box ("Chat theme"), or type /chat-theme glass, /chat-theme scope=character midnight, /chat-theme default.` }),
+                characterThemeCount() ? el('div', { class: 'menu_button mmu-small-btn', text: `${t`Clear character themes`} (${characterThemeCount()})`, onClick: () => { if (confirm(t`Remove the themes saved for characters and groups? Themes saved inside chats stay.`)) { clearCharacterThemes(); onChange(); render(); } } }) : null,
             ),
             section(t`Motion`, 'fa-wand-sparkles',
                 checkbox('animations', t`Smooth animations`),
@@ -163,9 +172,22 @@ export function mount() {
     };
     render();
 
+    const updateStatus = () => {
+        const node = document.getElementById('mmu-ct-settings-status');
+        if (!node) return;
+        const theme = resolveChatTheme();
+        node.textContent = !chatOpen()
+            ? t`Now: main UI, ${modeLabel(theme.mode)} (default).`
+            : theme.source.mode === 'default'
+                ? t`Now: this chat uses the default, ${modeLabel(theme.mode)}.`
+                : t`Now: this chat uses ${modeLabel(theme.mode)}, set for the ${theme.source.mode === 'chat' ? t`chat` : t`character`}. Changing the default above won't change it.`;
+    };
+    document.addEventListener('mmu:theme-applied', updateStatus);
+
     const block = el('div', { id: 'mmu-settings', class: 'inline-drawer' },
         el('div', { class: 'inline-drawer-toggle inline-drawer-header' }, el('b', { text: 'Modern Mobile UI' }), el('div', { class: 'inline-drawer-icon fa-solid fa-circle-chevron-down down' })),
         content,
     );
     host.append(block);
+    updateStatus();
 }

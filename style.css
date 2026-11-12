@@ -1089,3 +1089,96 @@ body.mmu-think #chat .mes.mmu-thinking .mes_text,
 body.mmu-think #chat .mes.mmu-thinking .mes_text * { text-shadow: none !important; }
 body.mmu-on[data-mmu-mode="glass"].mmu-think #chat .mes.mmu-thinking .mes_text,
 body.mmu-on[data-mmu-mode="glass"].mmu-think #chat .mes.mmu-thinking .mes_text * { color: transparent !important; }
+
+/* ==========================================================================
+   13. Themes per chat: picker, swatches, cross-fade
+   ========================================================================== */
+/* Cross-fade the whole UI when a chat with a different theme opens */
+html.mmu-theme-fade::view-transition-old(root),
+html.mmu-theme-fade::view-transition-new(root) {
+    animation-duration: 0.38s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+dialog.popup.mmu-ct-popup { max-width: min(460px, calc(100vw - 20px)); }
+.mmu-ct { display: flex; flex-direction: column; gap: 8px; text-align: left; font-family: var(--cai-font, inherit); }
+.mmu-ct h3 { margin: 0; font-size: 18px; font-weight: 700; }
+.mmu-ct-sub { margin-top: -4px; font-size: 12px; opacity: 0.65; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mmu-ct-label { margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.7; }
+
+.mmu-ct-scope { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgba(127, 127, 127, 0.14); }
+.mmu-ct-scope button {
+    flex: 1 1 0; min-width: 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 7px 10px; border: none; border-radius: 999px; background: transparent; color: inherit;
+    font: 600 12.5px var(--cai-font, inherit); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: background-color 0.2s ease, transform 0.25s var(--cai-pop, ease);
+}
+.mmu-ct-scope button i { font-size: 11px; opacity: 0.75; }
+.mmu-ct-scope button.is-active { background: var(--cai-accent, #ececf1); color: var(--cai-accent-ink, #18181b); }
+.mmu-ct-scope button:active { transform: scale(0.96); }
+
+.mmu-ct-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.mmu-ct-card {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 8px; margin: 0;
+    border: 1px solid rgba(127, 127, 127, 0.25); border-radius: 14px; background: rgba(127, 127, 127, 0.08);
+    color: inherit; text-align: left; cursor: pointer; font-family: inherit;
+    transition: border-color 0.2s ease, transform 0.25s var(--cai-pop, ease), background-color 0.2s ease;
+}
+.mmu-ct-card:active { transform: scale(0.96); }
+.mmu-ct-card.is-active { border-color: var(--cai-accent, #ececf1); box-shadow: 0 0 0 1px var(--cai-accent, #ececf1); background: rgba(127, 127, 127, 0.14); }
+.mmu-ct-card-label { font-weight: 700; font-size: 13px; }
+.mmu-ct-card small { font-size: 11px; opacity: 0.65; }
+
+/* Mini previews of each appearance */
+.mmu-ct-swatch { position: relative; display: flex; flex-direction: column; gap: 4px; width: 100%; height: 46px; padding: 7px; border-radius: 10px; overflow: hidden; margin-bottom: 4px; }
+.mmu-ct-swatch i { display: block; height: 8px; border-radius: 5px; }
+.mmu-ct-swatch i:nth-child(1) { width: 78%; }
+.mmu-ct-swatch i:nth-child(2) { width: 52%; align-self: flex-end; }
+.mmu-ct-swatch i:nth-child(3) { width: 66%; }
+.mmu-ct-swatch-zinc { background: #18181b; }
+.mmu-ct-swatch-zinc i { background: #3a3b40; }
+.mmu-ct-swatch-zinc i:nth-child(2) { background: #52535a; }
+.mmu-ct-swatch-midnight { background: #000; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08); }
+.mmu-ct-swatch-midnight i { background: #1c1c1f; }
+.mmu-ct-swatch-midnight i:nth-child(2) { background: #2c2c30; }
+.mmu-ct-swatch-light { background: #f4f4f5; }
+.mmu-ct-swatch-light i { background: #ffffff; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08); }
+.mmu-ct-swatch-light i:nth-child(2) { background: #e4e4e7; }
+.mmu-ct-swatch-glass { background: radial-gradient(circle at 20% 20%, #a855f7, transparent 55%), radial-gradient(circle at 85% 80%, #06b6d4, transparent 55%), #1e1b4b; }
+.mmu-ct-swatch-glass i { background: rgba(255, 255, 255, 0.22); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.25); }
+
+.mmu-ct-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.mmu-ct-chips button {
+    padding: 6px 12px; border: 1px solid rgba(127, 127, 127, 0.3); border-radius: 999px; background: transparent;
+    color: inherit; font: 600 12.5px var(--cai-font, inherit); cursor: pointer;
+    transition: transform 0.25s var(--cai-pop, ease), background-color 0.2s ease;
+}
+.mmu-ct-chips button.is-active { background: var(--cai-accent, #ececf1); color: var(--cai-accent-ink, #18181b); border-color: transparent; }
+.mmu-ct-chips button:active { transform: scale(0.94); }
+
+.mmu-ct-glass { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px; border-radius: 12px; background: rgba(127, 127, 127, 0.08); }
+.mmu-ct-check { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.mmu-ct-range { display: flex; align-items: center; gap: 10px; }
+.mmu-ct-range input[type="range"] { flex: 1; margin: 0; }
+.mmu-ct-range input[type="range"]:disabled { opacity: 0.4; }
+.mmu-ct-value { min-width: 40px; text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; opacity: 0.8; }
+
+.mmu-ct-status { display: flex; align-items: flex-start; gap: 8px; margin-top: 6px; padding: 8px 10px; border-radius: 10px; background: rgba(127, 127, 127, 0.12); font-size: 12.5px; }
+.mmu-ct-status i { margin-top: 2px; opacity: 0.7; }
+.mmu-ct-hint { font-size: 11.5px; opacity: 0.65; }
+#mmu-settings .mmu-ct-settings-status { font-size: 12px; opacity: 0.8; padding: 2px 0 4px; }
+
+body.mmu-anim .mmu-ct.is-opening .mmu-ct-card,
+body.mmu-anim .mmu-ct.is-opening .mmu-ct-chips button { animation: mmu-pop-in 0.35s var(--cai-pop) backwards; }
+body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(2) { animation-delay: 0.03s; }
+body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(3) { animation-delay: 0.06s; }
+body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(4) { animation-delay: 0.09s; }
+body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(5) { animation-delay: 0.12s; }
+
+/* Liquid Glass: popups, drawers and toasts stay frosted (readable) even with SillyTavern's "No Blur Effect" */
+body.mmu-on[data-mmu-mode="glass"] dialog.popup,
+body.mmu-on[data-mmu-mode="glass"] .drawer-content,
+body.mmu-on[data-mmu-mode="glass"] #toast-container > div {
+    backdrop-filter: blur(calc(var(--mmu-glass-blur, 16px) + 12px)) saturate(160%) !important;
+    -webkit-backdrop-filter: blur(calc(var(--mmu-glass-blur, 16px) + 12px)) saturate(160%) !important;
+}
