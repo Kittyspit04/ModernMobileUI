@@ -2,7 +2,7 @@
  * Settings block in the Extensions panel. Uses SillyTavern's own control
  * classes so it looks native, with a few of our own touches.
  */
-import { settings, set, resetAll, DEFAULT_ENHANCE_SYSTEM } from '../lib/settings.js';
+import { settings, set, resetAll, DEFAULT_ENHANCE_SYSTEM, DEFAULT_REPLY_PROMPT } from '../lib/settings.js';
 import { apply as applyTheme } from '../lib/theme.js';
 import { updateVisibility as refreshEnhanceButtons } from '../lib/enhance.js';
 import { refresh as refreshSliderLock, setUnlocked } from '../lib/sliderlock.js';
@@ -112,22 +112,28 @@ export function mount() {
                 selectRow('animationIntensity', t`Intensity`, [{ value: 'subtle', label: t`Subtle` }, { value: 'normal', label: t`Normal` }, { value: 'lively', label: t`Lively` }]),
                 checkbox('wordReveal', t`Word-by-word reveal while streaming`, t`Needs Streaming and “Stream Fade-In” in User Settings → Miscellaneous`),
             ),
-            section(t`Draft enhancement`, 'fa-pen-fancy',
-                checkbox('enhance.showPolish', t`Show the Polish button (wording only)`),
-                checkbox('enhance.showContext', t`Show the Enhance button (replies to the last message)`),
+            section(t`Reply for me & Polish`, 'fa-wand-magic-sparkles',
+                checkbox('enhance.showReply', t`Show the Reply for me button`, t`Writes your persona's next message from the whole chat (character card, World Info, persona, history) into the input box, without sending it. Text already in the box is used as the idea for the reply`),
+                selectRow('enhance.replyLength', t`Reply length`, [{ value: 'match', label: t`Like my recent messages` }, { value: 'short', label: t`Short` }, { value: 'long', label: t`Long and detailed` }]),
+                checkbox('enhance.showPolish', t`Show the Polish button`, t`Rewrites your draft for wording only, nothing new is added`),
                 selectRow('enhance.layout', t`Composer buttons`, [{ value: 'auto', label: t`One button on narrow phones, two otherwise` }, { value: 'both', label: t`Always two buttons` }, { value: 'single', label: t`Always one button with a menu` }]),
-                checkbox('enhance.includePersona', t`Give the model your persona description`),
-                checkbox('enhance.includeCharacter', t`Give the model the character card`, t`Context mode only`),
+                checkbox('enhance.includePersona', t`Polish: give the model your persona description`),
                 checkbox('enhance.typingEffect', t`Type the result into the box word by word`),
                 textRow('enhance.responseLength', t`Max response tokens`, { type: 'number' }),
-                textRow('enhance.language', t`Output language`, { placeholder: t`blank = same as the draft` }),
-                textRow('enhance.extraInstruction', t`Extra instruction`, { placeholder: t`e.g. keep it under 80 words` }),
+                textRow('enhance.language', t`Output language`, { placeholder: t`blank = the language of the chat` }),
+                textRow('enhance.extraInstruction', t`Extra instruction (both buttons)`, { placeholder: t`e.g. always write in first person` }),
                 el('div', { class: 'mmu-row mmu-row-col' },
-                    el('span', { class: 'mmu-row-label', text: t`System prompt` }),
+                    el('span', { class: 'mmu-row-label', text: t`Reply for me instruction` }),
+                    (() => { const ta = el('textarea', { class: 'text_pole mmu-textarea', rows: 6, onChange: () => { set('enhance.replyPrompt', ta.value.trim() || DEFAULT_REPLY_PROMPT); } }); ta.value = get('enhance.replyPrompt'); return ta; })(),
+                    el('small', { class: 'mmu-opt-hint mmu-opt-hint-flush', text: t`Added after SillyTavern's full chat prompt. {{user}} and {{char}} are filled in. The length, your idea, language and extra instruction are added automatically.` }),
+                    el('div', { class: 'menu_button mmu-small-btn', text: t`Reset instruction`, onClick: () => { set('enhance.replyPrompt', DEFAULT_REPLY_PROMPT); render(); } }),
+                ),
+                el('div', { class: 'mmu-row mmu-row-col' },
+                    el('span', { class: 'mmu-row-label', text: t`Polish system prompt` }),
                     (() => { const ta = el('textarea', { class: 'text_pole mmu-textarea', rows: 5, onChange: () => { set('enhance.systemPrompt', ta.value || DEFAULT_ENHANCE_SYSTEM); } }); ta.value = get('enhance.systemPrompt'); return ta; })(),
                     el('div', { class: 'menu_button mmu-small-btn', text: t`Reset prompt`, onClick: () => { set('enhance.systemPrompt', DEFAULT_ENHANCE_SYSTEM); render(); } }),
                 ),
-                el('small', { class: 'mmu-opt-hint', text: t`Shortcuts in the input box: Ctrl/Cmd+Shift+E enhance, Ctrl/Cmd+Shift+P polish, Ctrl/Cmd+Shift+Z undo. Slash command: /enhance, /enhance polish, /enhance undo.` }),
+                el('small', { class: 'mmu-opt-hint', text: t`Tap the Reply for me button again while it writes to stop it. Shortcuts in the input box: Ctrl/Cmd+Shift+E reply for me, Ctrl/Cmd+Shift+P polish, Ctrl/Cmd+Shift+Z undo. Slash commands: /reply-for-me [idea], /enhance (polish), /enhance undo.` }),
             ),
             section(t`Mobile layout`, 'fa-mobile-screen',
                 mobilyzeDetected() ? el('div', { class: 'mmu-warn' }, el('i', { class: 'fa-solid fa-triangle-exclamation' }), el('span', { text: t`Mobilyze is active. Its features overlap with these, so the auto-hiding bar and navigation buttons stay off until you disable Mobilyze in Manage extensions.` })) : null,

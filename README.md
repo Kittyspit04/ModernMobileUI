@@ -2,7 +2,7 @@
 
 A c.ai-style mobile theme for [SillyTavern](https://github.com/SillyTavern/SillyTavern), packaged as an
 extension so nothing has to be pasted into Custom CSS. It bundles the dark, rounded chat look with smooth
-animations across the whole interface, two draft-enhancement buttons in the composer, three appearance
+animations across the whole interface, a Reply for me and a Polish button in the composer, three appearance
 modes, a colourful chat layout, and a slider lock that stops settings sliders from being nudged while you
 scroll on a phone.
 
@@ -21,7 +21,7 @@ language.
 3. Install and let the page reload. On a phone or tablet the theme is active immediately. On desktop widths
    it stays off until you tick **Also apply on desktop widths** in its settings.
 
-Requires a recent SillyTavern release (1.13 or newer). The enhancement buttons use whatever API and model
+Requires a recent SillyTavern release (1.13 or newer). Reply for me and Polish use whatever API and model
 you are connected to.
 
 ## Features
@@ -70,27 +70,33 @@ you are connected to.
 - Word-by-word reveal of streamed text (turn on **Streaming** and **Stream Fade-In** in User Settings →
   Miscellaneous).
 - Drawers drop in, the open top-bar icon pops, popup menus and toasts spring in, recent chats and the
-  character list stagger in, buttons squash on press, the composer glows while a draft is being enhanced.
+  character list stagger in, buttons squash on press, the composer glows while a reply is written or a draft polished.
 - Three intensities (Subtle, Normal, Lively), an on/off switch, and the system *reduce motion* preference is
   respected unless you tick the override.
 - The **thinking indicator** (dots and pulsing avatar while a reply is generated) has its own switch and keeps
   working when *Smooth animations* is off.
 
-### Draft enhancement
-Two buttons next to the send button. Neither sends anything; they only rewrite what is in the input box.
+### Reply for me & Polish
+Two buttons next to the send button. Neither sends anything; they only fill the input box.
 
+- **Reply for me** (wand icon): writes your persona's next message. SillyTavern builds its full prompt
+  (character card, World Info, author's note, your persona and the chat history) and the extension adds an
+  instruction at the end: answer the character's last message as your persona, in your voice, style and point
+  of view, keep continuity with the scene, and never write for the character. If there is already text in
+  the box, it is used as the idea for the reply ("she accepts the deal but asks for gold"). Tap the button
+  again while it writes to stop it. Reply length: like your recent messages, short, or long. The instruction
+  itself can be edited in the settings.
 - **Polish** (pen icon): fixes grammar and flow, formats actions in asterisks and speech in quotes, keeps your
   meaning and length. Does not look at the chat.
-- **Enhance** (wand icon): rewrites the draft as a proper reply to the character's last message. The model
-  sees that message, the character card and your persona description, keeps continuity with names, places
-  and tone, and never writes for the other character.
 
-The result is typed into the box word by word. An **Undo enhancement** chip appears above the composer for
-twenty seconds and restores the previous draft. Keyboard: Ctrl/Cmd+Shift+E (enhance), Ctrl/Cmd+Shift+P
-(polish), Ctrl/Cmd+Shift+Z (undo). Slash command: `/enhance`, `/enhance polish`, `/enhance undo`.
+On narrow phones the two share one button with a small menu (configurable). The result is typed into the box
+word by word, and an **Undo** chip above the composer restores the previous text for twenty seconds.
+Keyboard: Ctrl/Cmd+Shift+E (reply for me), Ctrl/Cmd+Shift+P (polish), Ctrl/Cmd+Shift+Z (undo). Slash
+commands: `/reply-for-me`, `/reply-for-me <idea>`, `/enhance` (polish), `/enhance reply`, `/enhance undo`.
 
-Options: hide either button, max response tokens, output language, an extra standing instruction, whether
-to include persona and character card, and the system prompt.
+Options: hide either button, reply length, max response tokens, output language, an extra standing
+instruction, whether Polish gets your persona description, the Reply for me instruction and the Polish system
+prompt.
 
 ### Mobile layout (replaces Mobilyze)
 - **Auto-hiding top bar**: slides away when you scroll down in the chat so the whole screen is story. It
@@ -161,7 +167,7 @@ background in SillyTavern's own `custom_background` field there.
 
 - `index.js` – bootstrap.
 - `lib/theme.js` – turns settings into body classes, data attributes and CSS variables; per-character hues.
-- `lib/enhance.js` – composer buttons, prompts, typing effect, undo, slash command.
+- `lib/enhance.js` – Reply for me (quiet prompt over the full chat) and Polish, typing effect, undo, slash commands.
 - `lib/sliderlock.js` – the lock, the floating pill and the hint.
 - `lib/layout.js` – auto-hiding bar, pull-tab, edge swipe, message navigation, tablet width, density.
 - `lib/chattheme.js` – per-chat and per-character theme storage and resolution; `ui/chattheme.js` – the picker, wand item, `/chat-theme`.
