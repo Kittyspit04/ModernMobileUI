@@ -90,6 +90,10 @@ notice in its settings. Disable Mobilyze in Manage extensions to use the built-i
   extension now runs those display-only scripts on the previews (global, preset and the chat character's
   allowed scoped scripts), removes `[status]` header blocks such as time and location trackers, strips
   markup, and shows "No messages yet" instead of `[The message is empty]`.
+- **Your own preview text per chat**: tap the quote button on a recent chat card and write what the card
+  should show. Only the start screen changes; the chat file and its last message stay as they are. "Use last
+  message" in the same dialog removes it again. The text follows the chat when you rename it there and is
+  dropped when you delete the chat. Settings has a button to clear all custom previews.
 - **Custom replacements**: one rule per line, `pattern => replacement`, with `/regex/flags` patterns
   supported; leave the right side empty to delete the match.
 - **Preview lines** (1 to 8), or hide the preview entirely, or switch back to the unchanged text.

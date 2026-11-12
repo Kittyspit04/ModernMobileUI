@@ -7,7 +7,7 @@ import { apply as applyTheme } from '../lib/theme.js';
 import { updateVisibility as refreshEnhanceButtons } from '../lib/enhance.js';
 import { refresh as refreshSliderLock, setUnlocked } from '../lib/sliderlock.js';
 import { apply as applyLayout, ensureRevealTrigger, mobilyzeDetected } from '../lib/layout.js';
-import { apply as applyWelcome } from '../lib/welcome.js';
+import { apply as applyWelcome, customPreviewCount, clearCustomPreviews } from '../lib/welcome.js';
 import { t } from '../lib/st.js';
 
 function el(tag, attrs = {}, ...children) {
@@ -139,6 +139,8 @@ export function mount() {
                     (() => { const ta = el('textarea', { class: 'text_pole mmu-textarea', rows: 3, placeholder: '/\\$\\$/ =>  \nOOC: =>', onChange: () => { set('welcome.rules', ta.value); onChange(); } }); ta.value = get('welcome.rules') ?? ''; return ta; })(),
                     el('small', { class: 'mmu-opt-hint mmu-opt-hint-flush', text: t`One rule per line: pattern => replacement. Use /regex/flags for patterns; leave the right side empty to delete.` }),
                 ),
+                el('small', { class: 'mmu-opt-hint mmu-opt-hint-flush', text: t`Your own text for one chat: tap the quote button on its card on the start screen. It replaces the preview without changing the chat.` }),
+                customPreviewCount() ? el('div', { class: 'menu_button mmu-small-btn', text: `${t`Clear custom previews`} (${customPreviewCount()})`, onClick: () => { if (confirm(t`Remove all custom preview texts?`)) { clearCustomPreviews(); render(); } } }) : null,
                 el('small', { class: 'mmu-opt-hint mmu-opt-hint-flush', text: t`How many recent chats are listed is set with the gear button on the start screen.` }),
             ),
             section(t`Slider lock`, 'fa-lock',

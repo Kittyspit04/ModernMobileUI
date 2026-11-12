@@ -918,3 +918,17 @@ body.mmu-preview-lines #chat .welcomeRecent .recentChatList .recentChat .chatMes
     overflow-wrap: anywhere;
 }
 #mmu-settings .mmu-opt-hint-flush { padding-left: 0; }
+
+/* Custom preview text */
+#chat .welcomeRecent .recentChat .chatMessage.mmu-custom-preview::before {
+    content: "\f10d";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 0.75em;
+    margin-right: 6px;
+    opacity: 0.55;
+}
+#chat .welcomeRecent .recentChat.mmu-preview-saved { animation: mmu-preview-saved 0.7s ease-out; }
+@keyframes mmu-preview-saved { 0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5); } 100% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); } }
+dialog.popup.mmu-preview-popup h3 { margin: 0 0 4px; }
+dialog.popup.mmu-preview-popup .mmu-popup-hint { margin: 0 0 6px; opacity: 0.7; font-size: 0.9em; }
