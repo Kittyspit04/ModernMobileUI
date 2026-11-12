@@ -271,8 +271,8 @@ body.mmu-on #send_form #send_textarea::placeholder { color: var(--cai-muted); op
 /* Composer icons */
 body.mmu-on #send_form #leftSendForm,
 body.mmu-on #send_form #rightSendForm { flex-wrap: nowrap; align-items: center; gap: 2px; padding: 0; }
-body.mmu-on #send_form #leftSendForm > div,
-body.mmu-on #send_form #rightSendForm > div:not(.mes_stop) {
+body.mmu-on #send_form #leftSendForm > div:not(.displayNone),
+body.mmu-on #send_form #rightSendForm > div:not(.mes_stop, .stscript_btn, .displayNone) {
     display: flex; align-items: center; justify-content: center;
     width: 36px; height: 36px; margin: 0;
     font-size: 17px; border-radius: 50%;
@@ -280,7 +280,7 @@ body.mmu-on #send_form #rightSendForm > div:not(.mes_stop) {
     transition: transform 0.25s var(--cai-pop), background-color 0.2s ease, color 0.2s ease;
 }
 body.mmu-on #send_form #leftSendForm > div:active,
-body.mmu-on #send_form #rightSendForm > div:not(.mes_stop):active {
+body.mmu-on #send_form #rightSendForm > div:not(.mes_stop, .stscript_btn, .displayNone):active {
     transform: scale(0.85);
     background-color: rgba(127, 127, 127, 0.16);
     color: var(--cai-text);
@@ -293,6 +293,13 @@ body.mmu-on #send_form #rightSendForm > #send_but {
 }
 body.mmu-on #send_form #rightSendForm > #send_but:active { background-color: var(--cai-accent); color: var(--cai-accent-ink); }
 body.mmu-on #send_form #send_but::before { content: "\f062"; }
+/* STscript play / pause / stop stay hidden unless a script is running (core behaviour) */
+body.mmu-on #send_form #rightSendForm > .stscript_btn { display: none; }
+body.mmu-on #form_sheld.isExecutingCommandsFromChatInput #rightSendForm > .stscript_btn:is(.stscript_pause, .stscript_stop) { display: flex; }
+body.mmu-on #form_sheld.isExecutingCommandsFromChatInput.script_paused #rightSendForm > .stscript_btn.stscript_pause { display: none; }
+body.mmu-on #form_sheld.isExecutingCommandsFromChatInput.script_paused #rightSendForm > .stscript_btn.stscript_continue { display: flex; }
+body.mmu-on #form_sheld.isExecutingCommandsFromChatInput #rightSendForm > :is(#send_but, #mes_continue) { visibility: hidden; width: 0; height: 0; opacity: 0; }
+body.mmu-on #send_form #rightSendForm > .stscript_btn > .fa-solid { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
 /* Stop: same circle, square glyph */
 body.mmu-on #send_form #mes_stop { padding: 0; opacity: 1; }
 body.mmu-on #send_form #mes_stop i {
