@@ -522,6 +522,7 @@ body.mmu-on #chat .welcomePanel .welcomeShortcuts .menu_button {
     transition: transform 0.25s var(--cai-pop), background-color 0.2s ease;
 }
 body.mmu-on #chat .welcomePanel .welcomeShortcuts .menu_button:active { transform: scale(0.9); }
+body.mmu-on:not(.mmu-desktop) #chat .welcomePanel .welcomeShortcuts .menu_button:not(.openTemporaryChat) span { display: none; }
 body.mmu-on #chat .welcomePanel .welcomeShortcuts .openTemporaryChat {
     order: -1; width: auto; margin-right: auto; padding: 0 16px; gap: 8px;
     font-size: 14px; font-weight: 600; white-space: nowrap;
@@ -783,7 +784,7 @@ body.mmu-sliders-locked input[type="range"]:not([data-mmu-free]):not([data-mmu-f
 #mmu-settings .mmu-range-wrap input[type="range"] { flex: 1; margin: 0; }
 #mmu-settings .mmu-range-value { min-width: 42px; text-align: right; font-size: 12px; opacity: 0.8; }
 #mmu-settings .mmu-color { width: 42px; height: 30px; padding: 0; border: none; background: transparent; cursor: pointer; }
-#mmu-settings .mmu-small-btn { align-self: flex-start; padding: 4px 12px; font-size: 12px; }
+#mmu-settings .mmu-small-btn { align-self: flex-start; width: fit-content; max-width: 100%; padding: 4px 12px; font-size: 12px; }
 #mmu-settings .mmu-footer { display: flex; align-items: center; justify-content: space-between; padding: 4px 2px; }
 #mmu-settings .mmu-link { font-size: 12px; opacity: 0.7; }
 
@@ -1339,3 +1340,87 @@ body.mmu-on.mmu-jump-on { --mmu-swipe-inset: 24px; }
 /* Liquid Glass: keep the counter and plain arrows readable on bright backgrounds */
 body.mmu-on[data-mmu-mode="glass"] #chat .mes :is(.swipe_left, .swipe_right, .swipes-counter) { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65), 0 0 10px rgba(0, 0, 0, 0.35); }
 :is(body.mmu-on.mmu-swipebar[data-mmu-mode="glass"] #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages[data-mmu-mode="glass"] #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock > .swipes-counter { color: #fff !important; opacity: 1; }
+
+/* ==========================================================================
+   15. Desktop mode (body.mmu-desktop): wide screens, mouse and keyboard
+   --------------------------------------------------------------------------
+   SillyTavern sizes the chat, the top bar, the menus and both side panels from
+   one variable, --sheldWidth. Desktop mode sets it to a readable chat column
+   and gives the space around it to the side panels; the menus open as wide
+   centred sheets. Low specificity (:where) so Modern Persona / Modern Character
+   and the user's own CSS can still size their own windows.
+   ========================================================================== */
+body.mmu-desktop.mmu-chatw { --sheldWidth: min(var(--mmu-chat-w, 1000px), calc(100vw - 24px)); }
+body.mmu-desktop {
+    --mmu-desk-gutter: max(0px, calc((100vw - var(--sheldWidth)) / 2));
+    --mmu-desk-sheet: min(1280px, calc(100vw - 32px));
+    --mmu-desk-panel: clamp(340px, calc(var(--mmu-desk-gutter) - 20px), 560px);
+    --mmu-desk-top: calc(var(--topBarBlockSize) + 6px);
+}
+
+/* Menus from the top bar: one wide sheet, centred on the screen (they position against the
+   icon row, which is as wide as the chat) */
+body.mmu-desktop :where(#top-settings-holder .drawer-content:not(.fillLeft, .fillRight, #WorldInfo)) {
+    width: var(--mmu-desk-sheet) !important;
+    min-width: 0 !important;
+    left: calc((100% - var(--mmu-desk-sheet)) / 2) !important;
+    right: auto !important;
+    margin: 0 !important;
+    max-height: calc(100dvh - var(--topBarBlockSize) - 14px) !important;
+}
+body.mmu-desktop :where(#WorldInfo) {
+    width: var(--mmu-desk-sheet) !important;
+    min-width: 0 !important;
+    left: calc((100vw - var(--mmu-desk-sheet)) / 2) !important;
+    right: auto !important;
+    margin: 0 !important;
+}
+
+/* AI settings (left) and characters (right): floating panels in the space beside the chat */
+body.mmu-desktop :where(#left-nav-panel, #right-nav-panel) {
+    width: var(--mmu-desk-panel) !important;
+    min-width: 0 !important;
+    top: var(--mmu-desk-top) !important;
+    height: calc(100dvh - var(--mmu-desk-top) - 8px) !important;
+    max-height: calc(100dvh - var(--mmu-desk-top) - 8px) !important;
+    border-radius: 20px !important;
+    border: 1px solid var(--cai-line) !important;
+    box-shadow: var(--mmu-shadow, 0 18px 50px rgba(0, 0, 0, 0.45));
+    overflow: hidden;
+}
+body.mmu-desktop :where(#left-nav-panel) { left: 8px !important; right: auto !important; }
+body.mmu-desktop :where(#right-nav-panel) { right: 8px !important; left: auto !important; }
+
+/* Message navigation sits just outside the chat column */
+body.mmu-desktop #mmu-jump {
+    right: max(8px, calc(var(--mmu-desk-gutter) - 46px));
+    border-right: 1px solid var(--cai-line-strong, rgba(255, 255, 255, 0.16));
+    border-radius: 14px;
+}
+
+/* Start screen: recent chats as a grid of cards */
+body.mmu-desktop #chat .welcomeRecent .recentChatList {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+    align-items: stretch;
+}
+body.mmu-desktop #chat .welcomeRecent .recentChatList > :is(.showMoreChats, .noRecentChat) { grid-column: 1 / -1; justify-self: center; }
+body.mmu-desktop #chat .welcomeRecent .recentChatList .recentChat.hidden { display: none; }
+body.mmu-desktop #chat .welcomePanel .welcomeShortcuts .menu_button:not(.openTemporaryChat) { width: auto; padding: 0 14px; gap: 7px; font-size: 13px; white-space: nowrap; }
+body.mmu-desktop #chat .welcomePanel .welcomeShortcuts .menu_button:not(.openTemporaryChat):hover { color: var(--cai-text); background-color: var(--cai-user); }
+
+/* Mouse: hover states, quieter message actions until you point at a message */
+body.mmu-desktop #top-settings-holder .drawer-icon.closedIcon:hover { opacity: 1; color: var(--cai-text); background-color: color-mix(in srgb, var(--cai-user) 70%, transparent); }
+body.mmu-desktop #send_form :is(#leftSendForm, #rightSendForm) > div:not(.mes_stop, .stscript_btn, .displayNone, #send_but):hover { color: var(--cai-text); background-color: color-mix(in srgb, var(--cai-user) 70%, transparent); }
+body.mmu-desktop #chat .mes .mes_buttons { opacity: 0.45; transition: opacity 0.2s ease; }
+body.mmu-desktop #chat .mes:is(:hover, :focus-within) .mes_buttons { opacity: 1; }
+body.mmu-desktop #chat .mes .mes_buttons .mes_button:hover { opacity: 1; color: var(--cai-text); background-color: rgba(127, 127, 127, 0.16); }
+body.mmu-desktop .mmu-bg-tile:hover, body.mmu-desktop .mmu-ct-card:hover { box-shadow: 0 0 0 1px var(--cai-line-strong); }
+
+/* Thin, themed scrollbars */
+body.mmu-desktop { scrollbar-color: color-mix(in srgb, var(--cai-text) 22%, transparent) transparent; }
+body.mmu-desktop :is(#chat, .drawer-content, .popup, #mc-root, .mp-app) { scrollbar-width: thin; }
+body.mmu-desktop ::-webkit-scrollbar { width: 10px; height: 10px; }
+body.mmu-desktop ::-webkit-scrollbar-track { background: transparent; }
+body.mmu-desktop ::-webkit-scrollbar-thumb { background-color: color-mix(in srgb, var(--cai-text) 20%, transparent); border: 3px solid transparent; border-radius: 999px; background-clip: content-box; }
+body.mmu-desktop ::-webkit-scrollbar-thumb:hover { background-color: color-mix(in srgb, var(--cai-text) 34%, transparent); }

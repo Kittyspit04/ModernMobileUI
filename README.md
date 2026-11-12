@@ -1,13 +1,15 @@
 # Modern Mobile UI
 
-A c.ai-style mobile theme for [SillyTavern](https://github.com/SillyTavern/SillyTavern), packaged as an
-extension so nothing has to be pasted into Custom CSS. It bundles the dark, rounded chat look with smooth
-animations across the whole interface, a Reply for me and a Polish button in the composer, three appearance
-modes, a colourful chat layout, and a slider lock that stops settings sliders from being nudged while you
-scroll on a phone.
+A c.ai-style theme for [SillyTavern](https://github.com/SillyTavern/SillyTavern) on phones and desktops,
+packaged as an extension so nothing has to be pasted into Custom CSS. It bundles the dark, rounded chat look
+with smooth animations across the whole interface, a Reply for me and a Polish button in the composer, four
+appearance modes, a colourful chat layout, a desktop mode made for wide screens, and a slider lock that stops
+settings sliders from being nudged while you scroll on a phone.
 
-Pairs well with [Modern Persona](https://github.com/Kittyspit04/ModernPersona), which uses the same design
-language.
+Pairs well with [Modern Persona](https://github.com/Kittyspit04/ModernPersona) and
+[Modern Character](https://github.com/Kittyspit04/ModernCharacter), which use the same design language.
+Both work on their own and follow this extension's appearance (including themes per chat) when it is
+installed.
 
 ## Install
 
@@ -18,8 +20,8 @@ language.
    https://github.com/Kittyspit04/ModernMobileUI
    ```
 
-3. Install and let the page reload. On a phone or tablet the theme is active immediately. On desktop widths
-   it stays off until you tick **Also apply on desktop widths** in its settings.
+3. Install and let the page reload. The theme is active immediately: the phone layout on phones and tablets,
+   desktop mode on screens wider than 1000 px (switch it to the phone layout or off under **On computers**).
 
 Requires a recent SillyTavern release (1.13 or newer). Reply for me and Polish use whatever API and model
 you are connected to.
@@ -83,7 +85,7 @@ Two buttons next to the send button. Neither sends anything; they only fill the 
   its own: the character card and scenario, your persona, the World Info entries the recent chat activates,
   the chat summary (Summarize extension) and the recent messages, cleaned the way SillyTavern cleans them for
   prompts (your prompt-only regex scripts) with status trackers, time/date headers, Internal States sections,
-  HTML and code blocks removed. Your preset's prompts are not sent, so formatting rules meant for the
+  HTML and code blocks removed; words some presets join with `$$` become normal spaces. Your preset's prompts are not sent, so formatting rules meant for the
   character (trackers, calendars, internal states) are not copied into your reply; the preset's model settings
   still apply. The instruction asks for a reply to the character's last message as your persona, in your voice
   and point of view, never writing for the character and without any tracker or header. If there is already
@@ -104,6 +106,29 @@ Options: hide either button, clean or full prompt, how many recent messages the 
 length, max response tokens (0 = SillyTavern's response length, the default; thinking models such as Gemini
 count their thinking against this limit), output language, an extra standing instruction, whether Polish gets
 your persona description, the Reply for me instruction and the Polish system prompt.
+
+### Desktop mode
+On screens wider than 1000 px the theme switches to a layout made for mouse, keyboard and wide screens
+(16:9, 16:10 and ultrawide):
+
+- **A readable chat column** in the middle. **Auto** sizes it to the screen (about half the width, between
+  720 and 1200 px: 998 px on 1920×1080, 749 px on 1440×900, 1200 px on 1440p and ultrawide). Or pick
+  760, 960, 1200 or 1440 px, or keep **SillyTavern's Chat Width setting**.
+- **AI settings and the character list** open as floating panels in the space beside the chat (up to 560 px),
+  so on most screens they no longer cover it.
+- **Menus from the top bar** (API, formatting, World Info, user settings, backgrounds, extensions) open as one
+  wide centred sheet, up to 1280 px.
+- **Start screen**: recent chats as a grid of cards, the Docs/GitHub/Discord shortcuts as labelled buttons.
+- **Mouse touches**: hover states on the top bar, composer buttons and messages; message actions stay quiet
+  until you point at a message; thin scrollbars in the theme's colours; both composer buttons (Polish and
+  Reply for me) always shown; message navigation sits just beside the chat column.
+- **Phone-only features are off**: the auto-hiding top bar, pull-tab, swipe gestures from the edge, the
+  tablet width limit and (unless you want it) the slider lock.
+
+Everything else, appearances, Liquid Glass, themes and backgrounds per chat, the swipe options and the start
+screen tweaks, works the same on desktop. Narrow the window below 1000 px and it switches back to the phone
+layout. **On computers** can also be set to *Same layout as on the phone* (the old "apply on desktop widths")
+or *Off*.
 
 ### Mobile layout (replaces Mobilyze)
 - **Auto-hiding top bar**: slides away when you scroll down in the chat so the whole screen is story. It
@@ -177,6 +202,8 @@ background in SillyTavern's own `custom_background` field there.
 - `lib/enhance.js` – Reply for me (quiet prompt over the full chat) and Polish, typing effect, undo, slash commands.
 - `lib/sliderlock.js` – the lock, the floating pill and the hint.
 - `lib/layout.js` – auto-hiding bar, pull-tab, edge swipe, message navigation, tablet width, density.
+- `lib/theme.js` also switches desktop mode (`body.mmu-desktop`) and sets the chat column (`--sheldWidth`);
+  its styles are section 15 of `style.css`.
 - `lib/chattheme.js` – per-chat and per-character theme storage and resolution; `ui/chattheme.js` – the picker, wand item, `/chat-theme`.
 - `lib/chatbg.js` – backgrounds per chat (SillyTavern's chat lock) and per character, `/chat-bg`.
 - `lib/swipes.js` – swipe gesture block and the body classes for the swipe bar and bigger arrows (CSS in section 14).
