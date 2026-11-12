@@ -65,6 +65,21 @@ twenty seconds and restores the previous draft. Keyboard: Ctrl/Cmd+Shift+E (enha
 Options: hide either button, max response tokens, output language, an extra standing instruction, whether
 to include persona and character card, and the system prompt.
 
+### Mobile layout (replaces Mobilyze)
+- **Auto-hiding top bar**: slides away when you scroll down in the chat so the whole screen is story. It
+  comes back when you scroll up, tap or drag the pull-tab at the top, or swipe down from the top edge.
+  Each trigger can be switched off individually, but one always stays on so the bar can never get stuck.
+  Opening any drawer shows the bar and keeps it there. The hide-again delay is adjustable.
+- **Message navigation buttons**: a small pill on the right edge steps to the previous or next message.
+  Hidden on the home screen.
+- **Tablet centering**: chat, bars and drawers share one maximum width (800 px by default) so lines stay
+  readable on wide screens and panels never bleed off-screen.
+- **Chat density**: *Comfortable* keeps the avatar beside the bubble; *Compact* shows a small avatar beside
+  the name and gives the bubble the full width, without text flowing under the picture.
+
+If Mobilyze is still installed, Modern Mobile UI keeps its own bar and navigation features off and shows a
+notice in its settings. Disable Mobilyze in Manage extensions to use the built-in versions.
+
 ### Slider lock
 Range sliders in settings panels (temperature, penalties, and so on) are locked by default. Tapping or
 dragging a locked slider does nothing and shows a short hint. The number box next to each slider stays
@@ -85,6 +100,7 @@ Everything is kept in `extension_settings.modernMobileUI` in your SillyTavern us
 - `lib/theme.js` – turns settings into body classes, data attributes and CSS variables; per-character hues.
 - `lib/enhance.js` – composer buttons, prompts, typing effect, undo, slash command.
 - `lib/sliderlock.js` – the lock, the floating pill and the hint.
+- `lib/layout.js` – auto-hiding bar, pull-tab, edge swipe, message navigation, tablet width, density.
 - `ui/settings.js` – the settings block in the Extensions panel.
 - `style.css` – tokens, keyframes, base theme, colourful layout, motion layer, slider lock, settings styles.
 

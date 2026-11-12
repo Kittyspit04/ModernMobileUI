@@ -6,6 +6,7 @@ import { settings, set, resetAll, DEFAULT_ENHANCE_SYSTEM } from '../lib/settings
 import { apply as applyTheme } from '../lib/theme.js';
 import { updateVisibility as refreshEnhanceButtons } from '../lib/enhance.js';
 import { refresh as refreshSliderLock, setUnlocked } from '../lib/sliderlock.js';
+import { apply as applyLayout, ensureRevealTrigger, mobilyzeDetected } from '../lib/layout.js';
 import { t } from '../lib/st.js';
 
 function el(tag, attrs = {}, ...children) {
@@ -23,7 +24,9 @@ function el(tag, attrs = {}, ...children) {
 }
 
 function onChange() {
+    ensureRevealTrigger();
     applyTheme();
+    applyLayout();
     refreshEnhanceButtons();
     refreshSliderLock();
 }
@@ -106,6 +109,18 @@ export function mount() {
                     el('div', { class: 'menu_button mmu-small-btn', text: t`Reset prompt`, onClick: () => { set('enhance.systemPrompt', DEFAULT_ENHANCE_SYSTEM); render(); } }),
                 ),
                 el('small', { class: 'mmu-opt-hint', text: t`Shortcuts in the input box: Ctrl/Cmd+Shift+E enhance, Ctrl/Cmd+Shift+P polish, Ctrl/Cmd+Shift+Z undo. Slash command: /enhance, /enhance polish, /enhance undo.` }),
+            ),
+            section(t`Mobile layout`, 'fa-mobile-screen',
+                mobilyzeDetected() ? el('div', { class: 'mmu-warn' }, el('i', { class: 'fa-solid fa-triangle-exclamation' }), el('span', { text: t`Mobilyze is active. Its features overlap with these, so the auto-hiding bar and navigation buttons stay off until you disable Mobilyze in Manage extensions.` })) : null,
+                checkbox('layout.autoHideBar', t`Auto-hide the top menu bar while reading`, t`Slides away when you scroll down in the chat`),
+                rangeRow('layout.autoHideDelay', t`Hide again after`, { min: 0, max: 10000, step: 500, unit: ' ms' }),
+                checkbox('layout.revealScroll', t`Reveal: scroll up`),
+                checkbox('layout.revealPullTab', t`Reveal: pull-tab at the top`),
+                checkbox('layout.revealEdgeSwipe', t`Reveal: swipe down from the top edge`),
+                selectRow('layout.pullTab', t`Pull-tab style`, [{ value: 'standard', label: t`Standard` }, { value: 'subtle', label: t`Subtle` }]),
+                checkbox('layout.jumpButtons', t`Message navigation buttons`, t`Floating up/down buttons on the right edge step through messages`),
+                textRow('layout.tabletMaxWidth', t`Max chat width on tablets (px, 0 = off)`, { type: 'number' }),
+                selectRow('layout.density', t`Chat density`, [{ value: 'comfortable', label: t`Comfortable (avatar beside bubble)` }, { value: 'compact', label: t`Compact (small avatar, full-width bubbles)` }]),
             ),
             section(t`Slider lock`, 'fa-lock',
                 checkbox('sliders.lockByDefault', t`Lock sliders in settings panels`, t`Prevents accidental changes while scrolling on a phone`),

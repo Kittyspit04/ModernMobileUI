@@ -791,3 +791,107 @@ body.mmu-sliders-locked input[type="range"]:not([data-mmu-free]):not([data-mmu-f
     body.mmu-anim *, body.mmu-anim *::before, body.mmu-anim *::after { animation: none !important; }
     #mmu-slider-lock, #mmu-undo-chip { transition: none; }
 }
+
+/* ==========================================================================
+   10. Mobile layout (replaces Mobilyze)
+   ========================================================================== */
+/* Auto-hiding top bar */
+body.mmu-autobar #top-bar,
+body.mmu-autobar #top-settings-holder {
+    transition: transform 0.32s var(--cai-smooth, ease), opacity 0.25s ease, visibility 0.32s;
+    opacity: 1;
+    visibility: visible;
+}
+body.mmu-autobar.mmu-bar-hidden #top-bar,
+body.mmu-autobar.mmu-bar-hidden #top-settings-holder {
+    transform: translateY(-105%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+body.mmu-autobar.mmu-bar-hidden { --topBarBlockSize: 0px; }
+body.mmu-autobar #sheld { transition: top 0.32s var(--cai-smooth, ease), height 0.32s var(--cai-smooth, ease), max-height 0.32s var(--cai-smooth, ease); }
+body.mmu-autobar.mmu-bar-hidden #sheld {
+    top: 0 !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+}
+body.mmu-autobar.mmu-bar-hidden #sheld > :not(#chat):not(#form_sheld) { display: none !important; }
+
+/* Pull-tab */
+#mmu-pull-tab {
+    position: fixed; top: 0; left: 50%; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 24px; padding: 0; margin: 0;
+    border: 1px solid var(--cai-line-strong, rgba(255,255,255,0.16)); border-top: none;
+    border-radius: 0 0 14px 14px;
+    background: var(--cai-bot, #26272b); color: var(--cai-muted, #a1a1aa);
+    font-size: 11px; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    opacity: 0; transform: translate(-50%, -100%); pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.4s var(--cai-pop, ease), background-color 0.2s ease;
+}
+body.mmu-autobar.mmu-bar-hidden #mmu-pull-tab { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+body.mmu-autobar.mmu-bar-hidden[data-mmu-tab="subtle"] #mmu-pull-tab { opacity: 0.45; background: transparent; box-shadow: none; }
+#mmu-pull-tab:active { cursor: grabbing; background: var(--cai-user, #3a3b40); color: var(--cai-text, #ececf1); }
+body.mmu-anim #mmu-pull-tab i { animation: mmu-pull-hint 2.4s ease-in-out infinite; }
+@keyframes mmu-pull-hint { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(2px); } }
+
+/* Message navigation pill */
+#mmu-jump {
+    position: fixed; right: 0; top: calc(50dvh - 44px); z-index: 450;
+    display: flex; flex-direction: column; width: 30px; height: 88px; overflow: hidden;
+    border: 1px solid var(--cai-line-strong, rgba(255,255,255,0.16)); border-right: none;
+    border-radius: 14px 0 0 14px;
+    background: color-mix(in srgb, var(--cai-bot, #26272b) 88%, transparent);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    opacity: 0; transform: translateX(100%); pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.4s var(--cai-pop, ease);
+}
+body.mmu-jump-on #mmu-jump { opacity: 1; transform: none; pointer-events: auto; }
+body.mmu-jump-on.mmu-sheet-open #mmu-jump { opacity: 0; pointer-events: none; }
+#mmu-jump button {
+    flex: 1 1 0; margin: 0; padding: 0; border: none; background: transparent;
+    color: var(--cai-muted, #a1a1aa); font-size: 12px; cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.25s var(--cai-pop, ease), color 0.2s ease;
+}
+#mmu-jump button + button { border-top: 1px solid var(--cai-line, rgba(255,255,255,0.07)); }
+#mmu-jump button:active { background: rgba(127, 127, 127, 0.2); color: var(--cai-text, #ececf1); }
+#mmu-jump button.is-pulse { animation: mmu-flash-pop 0.4s var(--cai-pop, ease); }
+@keyframes mmu-flash-pop { 0% { transform: scale(1); } 40% { transform: scale(1.18); } 100% { transform: scale(1); } }
+body.mmu-on #chat .mes.last_mes { scroll-margin-top: 6px; }
+
+/* Tablet centering: chat, bars and drawers share one maximum width */
+body.mmu-tablet #sheld,
+body.mmu-tablet #top-bar,
+body.mmu-tablet #top-settings-holder,
+body.mmu-tablet #left-nav-panel,
+body.mmu-tablet #right-nav-panel,
+body.mmu-tablet .drawer-content {
+    width: min(100dvw, var(--mmu-max-width, 800px)) !important;
+    max-width: min(100dvw, var(--mmu-max-width, 800px)) !important;
+    min-width: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+body.mmu-tablet #mmu-jump { right: max(0px, calc((100dvw - var(--mmu-max-width, 800px)) / 2)); }
+
+/* Compact density: small avatar beside the name, full-width bubbles, no overlap */
+body.mmu-on[data-mmu-density="compact"] #chat .mes { position: relative; padding: 6px 10px 6px 10px !important; gap: 0; }
+body.mmu-on[data-mmu-density="compact"] #chat .mes .mesAvatarWrapper { position: absolute !important; left: 10px; top: 6px; }
+body.mmu-on[data-mmu-density="compact"] #chat .mes .avatar,
+body.mmu-on[data-mmu-density="compact"] #chat .mes .avatar img { width: 26px !important; height: 26px !important; min-width: 26px !important; }
+body.mmu-on[data-mmu-density="compact"] #chat .mes .mes_block { padding-left: 0 !important; }
+body.mmu-on[data-mmu-density="compact"] #chat .mes .ch_name { padding-left: 34px; min-height: 26px; }
+body.mmu-on[data-mmu-density="compact"] #chat .mes .mes_text { width: 100% !important; }
+body.mmu-on[data-mmu-density="compact"] #chat .mes.mmu-thinking .mes_text { width: auto !important; }
+
+/* Mobilyze conflict notice in settings */
+#mmu-settings .mmu-warn { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: rgba(248, 113, 113, 0.12); border: 1px solid rgba(248, 113, 113, 0.35); font-size: 12px; }
+#mmu-settings .mmu-warn i { color: #f87171; margin-top: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+    #mmu-pull-tab, #mmu-jump, body.mmu-autobar #top-bar, body.mmu-autobar #top-settings-holder, body.mmu-autobar #sheld { transition: none !important; animation: none !important; }
+}
