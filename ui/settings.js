@@ -7,6 +7,7 @@ import { apply as applyTheme } from '../lib/theme.js';
 import { updateVisibility as refreshEnhanceButtons } from '../lib/enhance.js';
 import { refresh as refreshSliderLock, setUnlocked } from '../lib/sliderlock.js';
 import { apply as applyLayout, ensureRevealTrigger, mobilyzeDetected } from '../lib/layout.js';
+import { apply as applyWelcome } from '../lib/welcome.js';
 import { t } from '../lib/st.js';
 
 function el(tag, attrs = {}, ...children) {
@@ -27,6 +28,7 @@ function onChange() {
     ensureRevealTrigger();
     applyTheme();
     applyLayout();
+    applyWelcome();
     refreshEnhanceButtons();
     refreshSliderLock();
 }
@@ -123,6 +125,21 @@ export function mount() {
                 checkbox('layout.jumpButtons', t`Message navigation buttons`, t`Floating up/down buttons on the right edge step through messages`),
                 textRow('layout.tabletMaxWidth', t`Max chat width on tablets (px, 0 = off)`, { type: 'number' }),
                 selectRow('layout.density', t`Message layout`, [{ value: 'full', label: t`Full width (avatar beside name)` }, { value: 'side', label: t`Side avatar (bubble next to avatar)` }]),
+            ),
+            section(t`Start screen`, 'fa-house',
+                checkbox('welcome.hideAssistant', t`Hide the assistant greeting`, t`Leaves more room for your recent chats`),
+                checkbox('welcome.hideShortcuts', t`Hide the shortcut buttons message`),
+                selectRow('welcome.previewMode', t`Last-message preview`, [{ value: 'clean', label: t`Cleaned up` }, { value: 'raw', label: t`As saved (unchanged)` }, { value: 'hidden', label: t`Hidden` }]),
+                checkbox('welcome.applyRegex', t`Apply my display Regex scripts to previews`, t`The same scripts that change how messages look in the chat`),
+                checkbox('welcome.stripStatus', t`Remove [status] blocks such as time and location headers`),
+                rangeRow('welcome.previewLines', t`Preview lines`, { min: 1, max: 8 }),
+                textRow('welcome.emptyText', t`Text for empty chats`, { placeholder: t`No messages yet` }),
+                el('div', { class: 'mmu-row mmu-row-col' },
+                    el('span', { class: 'mmu-row-label', text: t`Custom replacements` }),
+                    (() => { const ta = el('textarea', { class: 'text_pole mmu-textarea', rows: 3, placeholder: '/\\$\\$/ =>  \nOOC: =>', onChange: () => { set('welcome.rules', ta.value); onChange(); } }); ta.value = get('welcome.rules') ?? ''; return ta; })(),
+                    el('small', { class: 'mmu-opt-hint mmu-opt-hint-flush', text: t`One rule per line: pattern => replacement. Use /regex/flags for patterns; leave the right side empty to delete.` }),
+                ),
+                el('small', { class: 'mmu-opt-hint mmu-opt-hint-flush', text: t`How many recent chats are listed is set with the gear button on the start screen.` }),
             ),
             section(t`Slider lock`, 'fa-lock',
                 checkbox('sliders.lockByDefault', t`Lock sliders in settings panels`, t`Prevents accidental changes while scrolling on a phone`),

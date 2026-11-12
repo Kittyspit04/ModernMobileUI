@@ -7,6 +7,7 @@ import { mountButtons, registerSlashCommands } from './lib/enhance.js';
 import { mount as mountSliderLock } from './lib/sliderlock.js';
 import { mount as mountSettings } from './ui/settings.js';
 import { mount as mountLayout, apply as applyLayout } from './lib/layout.js';
+import { mount as mountWelcome, apply as applyWelcome } from './lib/welcome.js';
 import { events } from './lib/st.js';
 
 function boot() {
@@ -16,11 +17,12 @@ function boot() {
     mountButtons();
     mountSliderLock();
     mountLayout();
+    mountWelcome();
     mountSettings();
     registerSlashCommands();
 
     const { source, types } = events();
-    source.on(types.APP_READY, () => { applyTheme(); mountButtons(); applyLayout(); });
+    source.on(types.APP_READY, () => { applyTheme(); mountButtons(); applyLayout(); applyWelcome(); });
     if (types.SETTINGS_UPDATED) source.on(types.SETTINGS_UPDATED, () => { applyTheme(); applyLayout(); });
     console.log('[ModernMobileUI] ready');
 }

@@ -798,6 +798,10 @@ body.mmu-sliders-locked input[type="range"]:not([data-mmu-free]):not([data-mmu-f
 /* ==========================================================================
    10. Mobile layout (replaces Mobilyze)
    ========================================================================== */
+/* Never let anything widen the page sideways (the UI would pan and cut off on the left). */
+html:has(> body.mmu-on) { overflow-x: hidden; }
+body.mmu-on { overflow-x: hidden; }
+
 /* Auto-hiding top bar */
 body.mmu-autobar #top-bar,
 body.mmu-autobar #top-settings-holder {
@@ -848,10 +852,12 @@ body.mmu-anim #mmu-pull-tab i { animation: mmu-pull-hint 2.4s ease-in-out infini
     border-radius: 14px 0 0 14px;
     background: color-mix(in srgb, var(--cai-bot, #26272b) 88%, transparent);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-    opacity: 0; transform: translateX(100%); pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.4s var(--cai-pop, ease);
+    /* Hidden state stays inside the screen: an element parked past the right edge makes the
+       page wider than the phone and lets the whole UI pan sideways. */
+    opacity: 0; visibility: hidden; transform: scaleX(0.3); transform-origin: right center; pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.4s var(--cai-pop, ease), visibility 0.4s;
 }
-body.mmu-jump-on #mmu-jump { opacity: 0.28; transform: none; pointer-events: auto; }
+body.mmu-jump-on #mmu-jump { opacity: 0.28; visibility: visible; transform: none; pointer-events: auto; }
 body.mmu-jump-on #mmu-jump.is-active, body.mmu-jump-on #mmu-jump:active { opacity: 1; }
 body.mmu-jump-on.mmu-sheet-open #mmu-jump { opacity: 0; pointer-events: none; }
 #mmu-jump button {
@@ -898,3 +904,17 @@ body.mmu-on:not([data-mmu-density="side"]) #chat .mes.mmu-thinking .mes_text { w
 @media (prefers-reduced-motion: reduce) {
     #mmu-pull-tab, #mmu-jump, body.mmu-autobar #top-bar, body.mmu-autobar #top-settings-holder, body.mmu-autobar #sheld { transition: none !important; animation: none !important; }
 }
+
+
+/* ==========================================================================
+   11. Start screen
+   ========================================================================== */
+body.mmu-hide-assistant #chat:has(> .welcomePanel) > .mes[type="assistant_message"] { display: none !important; }
+body.mmu-hide-welcome-prompt #chat:has(> .welcomePanel) > .mes[type="welcome_prompt"] { display: none !important; }
+body.mmu-hide-preview #chat .welcomeRecent .recentChat .chatMessage { display: none !important; }
+body.mmu-preview-lines #chat .welcomeRecent .recentChatList .recentChat .chatMessageContainer .chatMessage {
+    -webkit-line-clamp: var(--mmu-preview-lines, 2);
+    line-clamp: var(--mmu-preview-lines, 2);
+    overflow-wrap: anywhere;
+}
+#mmu-settings .mmu-opt-hint-flush { padding-left: 0; }

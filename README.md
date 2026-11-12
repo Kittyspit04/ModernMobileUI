@@ -82,8 +82,22 @@ to include persona and character card, and the system prompt.
 If Mobilyze is still installed, Modern Mobile UI keeps its own bar and navigation features off and shows a
 notice in its settings. Disable Mobilyze in Manage extensions to use the built-in versions.
 
+### Start screen
+- **Hide the assistant greeting** below the recent chats (on by default) so more of your recent chats fit on
+  the screen. The shortcut buttons message can be hidden too.
+- **Cleaner last-message previews** on the recent chat cards. The preview is the raw stored text of the
+  chat's last message, so anything your Regex scripts only change *for display* never reached it. The
+  extension now runs those display-only scripts on the previews (global, preset and the chat character's
+  allowed scoped scripts), removes `[status]` header blocks such as time and location trackers, strips
+  markup, and shows "No messages yet" instead of `[The message is empty]`.
+- **Custom replacements**: one rule per line, `pattern => replacement`, with `/regex/flags` patterns
+  supported; leave the right side empty to delete the match.
+- **Preview lines** (1 to 8), or hide the preview entirely, or switch back to the unchanged text.
+- How many chats are listed is SillyTavern's own setting: the gear button on the start screen.
+
 ### Slider lock
-Range sliders in settings panels (temperature, penalties, and so on) are locked by default. Tapping or
+Range sliders in settings panels (temperature, penalties, and so on) are locked by default on the phone
+layout. On desktop, where a mouse does not nudge them by accident, they stay free. Tapping or
 dragging a locked slider does nothing and shows a short hint. The number box next to each slider stays
 editable. A floating **Sliders locked** pill appears whenever a panel is open; tap it to unlock, and the lock
 comes back when the panel closes. Both behaviours can be changed in the settings.
@@ -103,6 +117,7 @@ Everything is kept in `extension_settings.modernMobileUI` in your SillyTavern us
 - `lib/enhance.js` – composer buttons, prompts, typing effect, undo, slash command.
 - `lib/sliderlock.js` – the lock, the floating pill and the hint.
 - `lib/layout.js` – auto-hiding bar, pull-tab, edge swipe, message navigation, tablet width, density.
+- `lib/welcome.js` – start screen: hide greeting/shortcuts, preview clean-up with display regex and custom rules.
 - `ui/settings.js` – the settings block in the Extensions panel.
 - `style.css` – tokens, keyframes, base theme, colourful layout, motion layer, slider lock, settings styles.
 
