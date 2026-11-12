@@ -79,13 +79,19 @@ you are connected to.
 ### Reply for me & Polish
 Two buttons next to the send button. Neither sends anything; they only fill the input box.
 
-- **Reply for me** (wand icon): writes your persona's next message. SillyTavern builds its full prompt
-  (character card, World Info, author's note, your persona and the chat history) and the extension adds an
-  instruction at the end: answer the character's last message as your persona, in your voice, style and point
-  of view, keep continuity with the scene, and never write for the character. If there is already text in
-  the box, it is used as the idea for the reply ("she accepts the deal but asks for gold"). Tap the button
-  again while it writes to stop it. Reply length: like your recent messages, short, or long. The instruction
-  itself can be edited in the settings.
+- **Reply for me** (wand icon): writes your persona's next message. By default it uses a **clean prompt** of
+  its own: the character card and scenario, your persona, the World Info entries the recent chat activates,
+  the chat summary (Summarize extension) and the recent messages, cleaned the way SillyTavern cleans them for
+  prompts (your prompt-only regex scripts) with status trackers, time/date headers, Internal States sections,
+  HTML and code blocks removed. Your preset's prompts are not sent, so formatting rules meant for the
+  character (trackers, calendars, internal states) are not copied into your reply; the preset's model settings
+  still apply. The instruction asks for a reply to the character's last message as your persona, in your voice
+  and point of view, never writing for the character and without any tracker or header. If there is already
+  text in the box, it is used as the idea for the reply ("she accepts the deal but asks for gold").
+  Alternatively, **Full SillyTavern prompt** sends everything your preset sends (as a quiet prompt) with the
+  same rules added. Either way, a tracker or name label the model adds anyway is stripped, and an unfinished
+  last sentence is dropped. Tap the button again while it writes to stop it. Reply length: like your recent
+  messages, short, or long. The instruction itself can be edited in the settings.
 - **Polish** (pen icon): fixes grammar and flow, formats actions in asterisks and speech in quotes, keeps your
   meaning and length. Does not look at the chat.
 
@@ -94,9 +100,10 @@ word by word, and an **Undo** chip above the composer restores the previous text
 Keyboard: Ctrl/Cmd+Shift+E (reply for me), Ctrl/Cmd+Shift+P (polish), Ctrl/Cmd+Shift+Z (undo). Slash
 commands: `/reply-for-me`, `/reply-for-me <idea>`, `/enhance` (polish), `/enhance reply`, `/enhance undo`.
 
-Options: hide either button, reply length, max response tokens, output language, an extra standing
-instruction, whether Polish gets your persona description, the Reply for me instruction and the Polish system
-prompt.
+Options: hide either button, clean or full prompt, how many recent messages the clean prompt includes, reply
+length, max response tokens (0 = SillyTavern's response length, the default; thinking models such as Gemini
+count their thinking against this limit), output language, an extra standing instruction, whether Polish gets
+your persona description, the Reply for me instruction and the Polish system prompt.
 
 ### Mobile layout (replaces Mobilyze)
 - **Auto-hiding top bar**: slides away when you scroll down in the chat so the whole screen is story. It
