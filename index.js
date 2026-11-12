@@ -10,6 +10,7 @@ import { mount as mountLayout, apply as applyLayout } from './lib/layout.js';
 import { mount as mountWelcome, apply as applyWelcome } from './lib/welcome.js';
 import { mount as mountGlass } from './lib/glass.js';
 import { mount as mountChatBackgrounds } from './lib/chatbg.js';
+import { mount as mountSwipes } from './lib/swipes.js';
 import { mountMenuItem as mountChatThemeItem, registerSlashCommand as registerChatThemeCommand } from './ui/chattheme.js';
 import { events } from './lib/st.js';
 
@@ -23,6 +24,7 @@ function boot() {
     mountWelcome();
     mountGlass();
     mountChatBackgrounds();
+    mountSwipes();
     mountChatThemeItem();
     mountSettings();
     registerSlashCommands();

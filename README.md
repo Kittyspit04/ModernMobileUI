@@ -107,6 +107,22 @@ to include persona and character card, and the system prompt.
 If Mobilyze is still installed, Modern Mobile UI keeps its own bar and navigation features off and shows a
 notice in its settings. Disable Mobilyze in Manage extensions to use the built-in versions.
 
+### Swipes
+
+- **Swipe only with the arrow buttons** (off by default): swiping across the chat with your finger no
+  longer changes the reply, so it can't happen by accident while scrolling. The arrows, the keyboard and
+  `/swipe` still work. SillyTavern's own "Gestures" setting is left untouched.
+- **Swipe bar under the name** (off by default): the left arrow, the "Thought for…" field, the swipe
+  counter and the right arrow sit in one row between the character's name and the message. Tapping the
+  field still opens the thoughts, which then use the full width below the bar. Without a reasoning block
+  the counter sits in the middle. Works with both message layouts and Liquid Glass (glass buttons).
+- **Bigger swipe arrows** (on by default): 40 px buttons that are easier to hit. Without the swipe bar
+  they move to a strip just below the message instead of covering its last line.
+- With the message navigation buttons on, both arrows keep clear of them on the right edge.
+
+All of this restyles SillyTavern's own buttons, so swiping, generating a new swipe at the end and the
+swipe history keep working exactly as before.
+
 ### Start screen
 - **Hide the assistant greeting** below the recent chats (on by default) so more of your recent chats fit on
   the screen. The shortcut buttons message can be hidden too.
@@ -150,6 +166,7 @@ background in SillyTavern's own `custom_background` field there.
 - `lib/layout.js` – auto-hiding bar, pull-tab, edge swipe, message navigation, tablet width, density.
 - `lib/chattheme.js` – per-chat and per-character theme storage and resolution; `ui/chattheme.js` – the picker, wand item, `/chat-theme`.
 - `lib/chatbg.js` – backgrounds per chat (SillyTavern's chat lock) and per character, `/chat-bg`.
+- `lib/swipes.js` – swipe gesture block and the body classes for the swipe bar and bigger arrows (CSS in section 14).
 - `lib/glass.js` – Liquid Glass: samples the background for tint, rim colour and readability floor.
 - `lib/welcome.js` – start screen: hide greeting/shortcuts, preview clean-up with display regex and custom rules.
 - `ui/settings.js` – the settings block in the Extensions panel.

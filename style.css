@@ -1244,3 +1244,96 @@ body.mmu-on[data-mmu-mode="glass"] #toast-container > div {
     backdrop-filter: blur(calc(var(--mmu-glass-blur, 16px) + 12px)) saturate(160%) !important;
     -webkit-backdrop-filter: blur(calc(var(--mmu-glass-blur, 16px) + 12px)) saturate(160%) !important;
 }
+
+
+/* ==========================================================================
+   14. Swipes: bigger arrows and the swipe bar
+   ========================================================================== */
+body.mmu-on { --mmu-swipe-hit: 32px; --mmu-swipe-icon: 15px; --mmu-swipe-count: 52px; --mmu-swipe-inset: 0px; }
+body.mmu-on.mmu-swipe-big { --mmu-swipe-hit: 40px; --mmu-swipe-icon: 18px; }
+/* The message navigation buttons float on the right edge: keep both arrows clear of them. */
+body.mmu-on.mmu-jump-on { --mmu-swipe-inset: 24px; }
+
+/* Bigger arrows without the bar: a strip below the message, so they no longer cover its text. */
+:is(body.mmu-on.mmu-swipe-big:not(.mmu-swipebar) #chat .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipe-big.swipeAllMessages:not(.mmu-swipebar) #chat .mes:is(.swipes_visible, .last_swipe)) { padding-bottom: calc(var(--mmu-swipe-hit) + 6px) !important; }
+:is(body.mmu-on.mmu-swipe-big:not(.mmu-swipebar) #chat .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipe-big.swipeAllMessages:not(.mmu-swipebar) #chat .mes:is(.swipes_visible, .last_swipe)) > .swipe_left,
+:is(body.mmu-on.mmu-swipe-big:not(.mmu-swipebar) #chat .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipe-big.swipeAllMessages:not(.mmu-swipebar) #chat .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock > .swipe_right {
+    display: flex; align-items: center; justify-content: center;
+    width: var(--mmu-swipe-hit) !important; height: var(--mmu-swipe-hit) !important;
+    font-size: var(--mmu-swipe-icon) !important; border-radius: 50%; opacity: 0.6;
+}
+:is(body.mmu-on.mmu-swipe-big:not(.mmu-swipebar) #chat .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipe-big.swipeAllMessages:not(.mmu-swipebar) #chat .mes:is(.swipes_visible, .last_swipe)) > .swipe_left { left: calc(10px + var(--mmu-swipe-inset)) !important; bottom: 2px !important; }
+:is(body.mmu-on.mmu-swipe-big:not(.mmu-swipebar) #chat .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipe-big.swipeAllMessages:not(.mmu-swipebar) #chat .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock { right: calc(10px + var(--mmu-swipe-inset)) !important; bottom: 2px !important; flex-direction: row-reverse !important; align-items: center; }
+:is(body.mmu-on.mmu-swipe-big:not(.mmu-swipebar) #chat .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipe-big.swipeAllMessages:not(.mmu-swipebar) #chat .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock > .swipes-counter { height: auto !important; margin: 0 !important; font-size: 13px; font-weight: 600; opacity: 0.7; }
+:is(body.mmu-on.mmu-swipe-big:not(.mmu-swipebar) #chat .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipe-big.swipeAllMessages:not(.mmu-swipebar) #chat .mes:is(.swipes_visible, .last_swipe)).last_swipe > .swipeRightBlock > .swipe_right { opacity: 0.9; }
+
+/* The swipe bar: SillyTavern's own arrows, counter and reasoning field placed in one row
+   between the name and the message. The message becomes a grid; its block and the right-hand
+   swipe block dissolve (display: contents) so their children can share that row. */
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) {
+    display: grid !important;
+    grid-template-columns: [av] auto [a] calc(var(--mmu-swipe-hit) + var(--mmu-swipe-inset)) [mid] minmax(0, 1fr) [cnt] auto [b] calc(var(--mmu-swipe-hit) + var(--mmu-swipe-inset)) [end];
+    align-items: start !important;
+    column-gap: 0 !important;
+    row-gap: 0 !important;
+    overflow-x: clip;
+}
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > :is(.mes_block, .swipeRightBlock) { display: contents !important; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > :not(.mesAvatarWrapper),
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > * { grid-column: a / end; min-width: 0; }
+/* Side avatar: same spacing as the flex layout (checkbox slot + 10px gaps) */
+:is(body.mmu-on.mmu-swipebar[data-mmu-density="side"] #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages[data-mmu-density="side"] #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mesAvatarWrapper { grid-column: av; grid-row: 1 / span 3; margin: 0 10px 0 10px !important; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .for_checkbox { grid-column: av; grid-row: 1; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > .ch_name { grid-row: 1; margin-bottom: 4px !important; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipe_left,
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock > .swipe_right {
+    position: static !important;
+    grid-row: 2;
+    align-self: start; justify-self: center;
+    display: flex !important; align-items: center; justify-content: center;
+    width: var(--mmu-swipe-hit) !important; height: var(--mmu-swipe-hit) !important;
+    margin: 0 0 6px !important; padding: 0 !important;
+    font-size: var(--mmu-swipe-icon) !important;
+    border-radius: 50%;
+    background: var(--cai-bot);
+    color: var(--cai-text);
+    box-shadow: inset 0 0 0 1px var(--cai-line);
+    opacity: 0.85;
+}
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipe_left { grid-column: a; justify-self: end; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock > .swipe_right { grid-column: b; justify-self: start; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)).last_swipe > .swipeRightBlock > .swipe_right { opacity: 1; box-shadow: inset 0 0 0 1px var(--cai-line-strong); }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock > .swipes-counter {
+    grid-column: cnt; grid-row: 2;
+    align-self: start; justify-self: center;
+    display: flex !important; align-items: center; justify-content: center;
+    width: var(--mmu-swipe-count); min-width: 0 !important; height: var(--mmu-swipe-hit) !important;
+    margin: 0 0 6px !important; padding: 0 4px !important;
+    font-size: 13px !important; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums;
+    color: var(--cai-text) !important; opacity: 0.8;
+}
+/* No reasoning: the counter sits in the middle of the bar */
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)):not(.reasoning) > .swipeRightBlock > .swipes-counter { grid-column: mid; width: auto; }
+/* The reasoning field spans the bar; its header keeps clear of the arrows and the counter,
+   and when opened the thoughts use the full width below them. */
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > .mes_reasoning_details { grid-row: 2; grid-column: a / end; margin: 0 0 6px !important; padding: 0 !important; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > .mes_reasoning_details > .mes_reasoning_summary {
+    margin: 0 calc(var(--mmu-swipe-hit) + var(--mmu-swipe-inset) + var(--mmu-swipe-count) + 4px) 0 calc(var(--mmu-swipe-hit) + var(--mmu-swipe-inset) + 6px) !important;
+    min-height: var(--mmu-swipe-hit);
+    align-items: center;
+}
+/* One line: on narrow phones the title shortens with "…" instead of wrapping */
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > .mes_reasoning_details .mes_reasoning_header_block,
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > .mes_reasoning_details .mes_reasoning_header { min-width: 0; max-width: 100%; flex-wrap: nowrap !important; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > .mes_reasoning_details .mes_reasoning_header_title { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > .mes_reasoning_details .mes_reasoning_arrow { flex: 0 0 auto; }
+:is(body.mmu-on.mmu-swipebar #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .mes_block > .mes_reasoning_details[open] > .mes_reasoning { margin-top: 6px; }
+:is(body.mmu-on.mmu-swipebar[data-mmu-mode="glass"] #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages[data-mmu-mode="glass"] #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipe_left,
+:is(body.mmu-on.mmu-swipebar[data-mmu-mode="glass"] #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages[data-mmu-mode="glass"] #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock > .swipe_right {
+    background: var(--mmu-glass-sheet), var(--mmu-glass-fill) !important;
+    backdrop-filter: var(--mmu-glass-fx) !important;
+    -webkit-backdrop-filter: var(--mmu-glass-fx) !important;
+}
+/* Liquid Glass: keep the counter and plain arrows readable on bright backgrounds */
+body.mmu-on[data-mmu-mode="glass"] #chat .mes :is(.swipe_left, .swipe_right, .swipes-counter) { text-shadow: 0 1px 3px rgba(0, 0, 0, 0.65), 0 0 10px rgba(0, 0, 0, 0.35); }
+:is(body.mmu-on.mmu-swipebar[data-mmu-mode="glass"] #chat:not(:has(> .welcomePanel)) .mes.last_mes:is(.swipes_visible, .last_swipe), body.mmu-on.mmu-swipebar.swipeAllMessages[data-mmu-mode="glass"] #chat:not(:has(> .welcomePanel)) .mes:is(.swipes_visible, .last_swipe)) > .swipeRightBlock > .swipes-counter { color: #fff !important; opacity: 1; }
