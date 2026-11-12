@@ -651,7 +651,7 @@ body.mmu-think #chat .mes.mmu-thinking .swipe_right,
 body.mmu-think #chat .mes.mmu-thinking .swipeRightBlock { opacity: 0; pointer-events: none; }
 
 /* Thinking bubble with bouncing dots while waiting for the reply (non-streaming: last message is the user's) */
-body.mmu-think:is([data-generating="true"], .mmu-generating) #chat:has(> .mes.last_mes[is_user="true"])::after {
+body.mmu-think.mmu-generating #chat:has(> .mes.last_mes[is_user="true"])::after {
     content: ""; flex: 0 0 auto; order: 9999; align-self: flex-start;
     position: sticky; bottom: 8px; z-index: 5; box-sizing: content-box;
     width: 34px; height: 14px; margin: 6px 0 12px 10px; padding: 12px 16px;
