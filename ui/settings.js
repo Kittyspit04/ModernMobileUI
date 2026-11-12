@@ -93,6 +93,7 @@ export function mount() {
             section(t`Draft enhancement`, 'fa-pen-fancy',
                 checkbox('enhance.showPolish', t`Show the Polish button (wording only)`),
                 checkbox('enhance.showContext', t`Show the Enhance button (replies to the last message)`),
+                selectRow('enhance.layout', t`Composer buttons`, [{ value: 'auto', label: t`One button on narrow phones, two otherwise` }, { value: 'both', label: t`Always two buttons` }, { value: 'single', label: t`Always one button with a menu` }]),
                 checkbox('enhance.includePersona', t`Give the model your persona description`),
                 checkbox('enhance.includeCharacter', t`Give the model the character card`, t`Context mode only`),
                 checkbox('enhance.typingEffect', t`Type the result into the box word by word`),
