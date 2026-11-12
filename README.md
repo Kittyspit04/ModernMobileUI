@@ -47,7 +47,9 @@ you are connected to.
 - Drawers drop in, the open top-bar icon pops, popup menus and toasts spring in, recent chats and the
   character list stagger in, buttons squash on press, the composer glows while a draft is being enhanced.
 - Three intensities (Subtle, Normal, Lively), an on/off switch, and the system *reduce motion* preference is
-  respected.
+  respected unless you tick the override.
+- The **thinking indicator** (dots and pulsing avatar while a reply is generated) has its own switch and keeps
+  working when *Smooth animations* is off.
 
 ### Draft enhancement
 Two buttons next to the send button. Neither sends anything; they only rewrite what is in the input box.
@@ -74,8 +76,8 @@ to include persona and character card, and the system prompt.
   Hidden on the home screen.
 - **Tablet centering**: chat, bars and drawers share one maximum width (800 px by default) so lines stay
   readable on wide screens and panels never bleed off-screen.
-- **Chat density**: *Comfortable* keeps the avatar beside the bubble; *Compact* shows a small avatar beside
-  the name and gives the bubble the full width, without text flowing under the picture.
+- **Message layout**: *Full width* (default) puts the avatar beside the name and gives the bubble the whole
+  screen width; *Side avatar* keeps the bubble in a column next to the avatar.
 
 If Mobilyze is still installed, Modern Mobile UI keeps its own bar and navigation features off and shows a
 notice in its settings. Disable Mobilyze in Manage extensions to use the built-in versions.

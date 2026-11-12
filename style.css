@@ -62,7 +62,7 @@ body.mmu-on[data-mmu-motion="lively"] { --mmu-dur: 0.55s; --cai-pop: cubic-bezie
 @keyframes mmu-slide-l  { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
 @keyframes mmu-tab-pop  { from { transform: scale(0.7); } to { transform: scale(1); } }
 @keyframes mmu-word-in  { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: none; } }
-@keyframes mmu-ring     { 0% { box-shadow: 0 0 0 0 var(--cai-glow); } 70%, 100% { box-shadow: 0 0 0 9px rgba(236, 236, 241, 0); } }
+@keyframes mmu-ring     { 0% { box-shadow: 0 0 0 0 var(--cai-glow); } 70%, 100% { box-shadow: 0 0 0 5px rgba(236, 236, 241, 0); } }
 @keyframes mmu-breathe  { 0%, 100% { transform: scale(0.55); opacity: 0.4; } 50% { transform: scale(1); opacity: 1; } }
 @keyframes mmu-pulse    { 50% { opacity: 0.5; } }
 @keyframes mmu-dots     { 0%, 60%, 100% { background-position: 0% 70%, 50% 70%, 100% 70%; } 15% { background-position: 0% 0%, 50% 70%, 100% 70%; } 30% { background-position: 0% 70%, 50% 0%, 100% 70%; } 45% { background-position: 0% 70%, 50% 70%, 100% 0%; } }
@@ -322,7 +322,7 @@ body.mmu-on #form_sheld.isExecutingCommandsFromChatInput.script_paused #rightSen
 body.mmu-on #form_sheld.isExecutingCommandsFromChatInput #rightSendForm > :is(#send_but, #mes_continue) { visibility: hidden; width: 0; height: 0; opacity: 0; }
 body.mmu-on #send_form #rightSendForm > .stscript_btn > .fa-solid { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
 /* Stop: same circle, square glyph */
-body.mmu-on #send_form #mes_stop { padding: 0; opacity: 1; }
+body.mmu-on #send_form #mes_stop { flex: 0 0 auto; width: 36px; height: 36px; margin: 0 5px 0 0 !important; padding: 0 !important; opacity: 1; align-items: center; justify-content: center; }
 body.mmu-on #send_form #mes_stop i {
     display: flex; align-items: center; justify-content: center;
     width: 36px; height: 36px; border-radius: 50%;
@@ -340,6 +340,7 @@ body.mmu-on #send_form #mes_stop i::before { content: "\f04d"; }
     body.mmu-on #send_form #leftSendForm > div:not(.displayNone),
     body.mmu-on #send_form #rightSendForm > div:not(.mes_stop, .stscript_btn, .displayNone) { width: 32px; height: 32px; font-size: 15px; }
     body.mmu-on #send_form #rightSendForm > #send_but { font-size: 14px; }
+    body.mmu-on #send_form #mes_stop { width: 32px; height: 32px; margin-right: 4px !important; }
     body.mmu-on #send_form #mes_stop i { width: 32px; height: 32px; font-size: 12px; }
     body.mmu-on #send_form #send_textarea { padding: 7px 4px; }
 }
@@ -617,14 +618,14 @@ body.mmu-anim #chat .mes.last_mes { transform-origin: 0 100%; animation: mmu-msg
 
 /* Streaming replies: SillyTavern adds the character's message with a "..." placeholder.
    The extension marks it .mmu-thinking until the first token, then .mmu-streaming. */
-body.mmu-anim #chat .mes.mmu-thinking .mes_text {
+body.mmu-think #chat .mes.mmu-thinking .mes_text {
     position: relative;
     min-width: 66px;
     min-height: 42px;
     color: transparent !important;
 }
-body.mmu-anim #chat .mes.mmu-thinking .mes_text * { color: transparent !important; }
-body.mmu-anim #chat .mes.mmu-thinking .mes_text::after {
+body.mmu-think #chat .mes.mmu-thinking .mes_text * { color: transparent !important; }
+body.mmu-think #chat .mes.mmu-thinking .mes_text::after {
     content: "";
     position: absolute; left: 16px; top: 50%; width: 34px; height: 10px; transform: translateY(-50%);
     background-image:
@@ -635,22 +636,22 @@ body.mmu-anim #chat .mes.mmu-thinking .mes_text::after {
     background-position: 0% 70%, 50% 70%, 100% 70%;
     animation: mmu-dots 1.3s ease-in-out infinite;
 }
-body.mmu-anim #chat .mes.mmu-thinking { animation: mmu-msg-in 0.4s var(--cai-smooth) backwards; }
-body.mmu-anim #chat .mes.mmu-thinking .avatar img,
-body.mmu-anim #chat .mes.mmu-streaming .avatar img { animation: mmu-ring 1.6s ease-out infinite; }
-body.mmu-anim #chat .mes.mmu-thinking .name_text { animation: mmu-pulse 1.4s ease-in-out infinite; }
-body.mmu-anim #chat .mes.mmu-streaming .mes_text > p:last-child::after,
-body.mmu-anim #chat .mes.mmu-streaming .mes_text > :last-child:not(p)::after {
+body.mmu-think #chat .mes.mmu-thinking { animation: mmu-msg-in 0.4s var(--cai-smooth) backwards; }
+body.mmu-think #chat .mes.mmu-thinking .avatar img,
+body.mmu-think #chat .mes.mmu-streaming .avatar img { animation: mmu-ring 1.6s ease-out infinite; border-radius: 50%; }
+body.mmu-think #chat .mes.mmu-thinking .name_text { animation: mmu-pulse 1.4s ease-in-out infinite; }
+body.mmu-think #chat .mes.mmu-streaming .mes_text > p:last-child::after,
+body.mmu-think #chat .mes.mmu-streaming .mes_text > :last-child:not(p)::after {
     content: ""; display: inline-block; width: 9px; height: 9px; margin-left: 6px; border-radius: 50%; vertical-align: middle;
     background: var(--cai-text, currentColor); animation: mmu-breathe 1s ease-in-out infinite;
 }
-body.mmu-anim #chat .mes.mmu-thinking .mes_buttons,
-body.mmu-anim #chat .mes.mmu-thinking .swipe_left,
-body.mmu-anim #chat .mes.mmu-thinking .swipe_right,
-body.mmu-anim #chat .mes.mmu-thinking .swipeRightBlock { opacity: 0; pointer-events: none; }
+body.mmu-think #chat .mes.mmu-thinking .mes_buttons,
+body.mmu-think #chat .mes.mmu-thinking .swipe_left,
+body.mmu-think #chat .mes.mmu-thinking .swipe_right,
+body.mmu-think #chat .mes.mmu-thinking .swipeRightBlock { opacity: 0; pointer-events: none; }
 
 /* Thinking bubble with bouncing dots while waiting for the reply (non-streaming: last message is the user's) */
-body.mmu-anim:is([data-generating="true"], .mmu-generating) #chat:has(> .mes.last_mes[is_user="true"])::after {
+body.mmu-think:is([data-generating="true"], .mmu-generating) #chat:has(> .mes.last_mes[is_user="true"])::after {
     content: ""; flex: 0 0 auto; order: 9999; align-self: flex-start;
     position: sticky; bottom: 8px; z-index: 5; box-sizing: content-box;
     width: 34px; height: 14px; margin: 6px 0 12px 10px; padding: 12px 16px;
@@ -788,8 +789,10 @@ body.mmu-sliders-locked input[type="range"]:not([data-mmu-free]):not([data-mmu-f
    9. Reduced motion
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-    body.mmu-anim *, body.mmu-anim *::before, body.mmu-anim *::after { animation: none !important; }
-    #mmu-slider-lock, #mmu-undo-chip { transition: none; }
+    body:not(.mmu-ignore-rm).mmu-anim *, body:not(.mmu-ignore-rm).mmu-anim *::before, body:not(.mmu-ignore-rm).mmu-anim *::after { animation: none !important; }
+    body:not(.mmu-ignore-rm).mmu-think #chat .mes.mmu-thinking *, body:not(.mmu-ignore-rm).mmu-think #chat .mes.mmu-thinking *::after,
+    body:not(.mmu-ignore-rm).mmu-think #chat .mes.mmu-streaming *::after { animation: none !important; }
+    body:not(.mmu-ignore-rm) #mmu-slider-lock, body:not(.mmu-ignore-rm) #mmu-undo-chip { transition: none; }
 }
 
 /* ==========================================================================
@@ -848,7 +851,8 @@ body.mmu-anim #mmu-pull-tab i { animation: mmu-pull-hint 2.4s ease-in-out infini
     opacity: 0; transform: translateX(100%); pointer-events: none;
     transition: opacity 0.25s ease, transform 0.4s var(--cai-pop, ease);
 }
-body.mmu-jump-on #mmu-jump { opacity: 1; transform: none; pointer-events: auto; }
+body.mmu-jump-on #mmu-jump { opacity: 0.28; transform: none; pointer-events: auto; }
+body.mmu-jump-on #mmu-jump.is-active, body.mmu-jump-on #mmu-jump:active { opacity: 1; }
 body.mmu-jump-on.mmu-sheet-open #mmu-jump { opacity: 0; pointer-events: none; }
 #mmu-jump button {
     flex: 1 1 0; margin: 0; padding: 0; border: none; background: transparent;
@@ -878,15 +882,14 @@ body.mmu-tablet .drawer-content {
 }
 body.mmu-tablet #mmu-jump { right: max(0px, calc((100dvw - var(--mmu-max-width, 800px)) / 2)); }
 
-/* Compact density: small avatar beside the name, full-width bubbles, no overlap */
-body.mmu-on[data-mmu-density="compact"] #chat .mes { position: relative; padding: 6px 10px 6px 10px !important; gap: 0; }
-body.mmu-on[data-mmu-density="compact"] #chat .mes .mesAvatarWrapper { position: absolute !important; left: 10px; top: 6px; }
-body.mmu-on[data-mmu-density="compact"] #chat .mes .avatar,
-body.mmu-on[data-mmu-density="compact"] #chat .mes .avatar img { width: 26px !important; height: 26px !important; min-width: 26px !important; }
-body.mmu-on[data-mmu-density="compact"] #chat .mes .mes_block { padding-left: 0 !important; }
-body.mmu-on[data-mmu-density="compact"] #chat .mes .ch_name { padding-left: 34px; min-height: 26px; }
-body.mmu-on[data-mmu-density="compact"] #chat .mes .mes_text { width: 100% !important; }
-body.mmu-on[data-mmu-density="compact"] #chat .mes.mmu-thinking .mes_text { width: auto !important; }
+/* Full-width layout (default): avatar sits beside the name, the bubble uses the whole width.
+   "Side avatar" density keeps the avatar in its own column instead. */
+body.mmu-on:not([data-mmu-density="side"]) #chat .mes { position: relative; padding: 6px 10px !important; gap: 0 !important; }
+body.mmu-on:not([data-mmu-density="side"]) #chat .mes .mesAvatarWrapper { position: absolute !important; left: 10px; top: 6px; }
+body.mmu-on:not([data-mmu-density="side"]) #chat .mes .mes_block { padding-left: 0 !important; margin-left: 0 !important; }
+body.mmu-on:not([data-mmu-density="side"]) #chat .mes .ch_name { padding-left: calc(var(--cai-avatar) + 10px); min-height: var(--cai-avatar); margin-bottom: 2px; align-items: center; }
+body.mmu-on:not([data-mmu-density="side"]) #chat .mes .mes_text { width: 100% !important; max-width: 100% !important; }
+body.mmu-on:not([data-mmu-density="side"]) #chat .mes.mmu-thinking .mes_text { width: fit-content !important; min-width: 66px; }
 
 /* Mobilyze conflict notice in settings */
 #mmu-settings .mmu-warn { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: rgba(248, 113, 113, 0.12); border: 1px solid rgba(248, 113, 113, 0.35); font-size: 12px; }
