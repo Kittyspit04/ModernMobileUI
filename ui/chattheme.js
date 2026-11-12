@@ -115,6 +115,9 @@ function backgroundSection({ getScope, onPick }) {
         grid.classList.add('is-fresh');
         setTimeout(() => grid.classList.remove('is-fresh'), 700);
         update();
+        // Bring the selected background into view inside the grid (large libraries scroll).
+        const active = grid.querySelector('.mmu-bg-tile.is-active:not(.mmu-bg-inherit)');
+        if (active) grid.scrollTop = Math.max(0, active.offsetTop - (grid.clientHeight - active.offsetHeight) / 2);
     }).catch((err) => {
         console.warn('[ModernMobileUI] could not list backgrounds', err);
         grid.querySelectorAll('.mmu-bg-skeleton').forEach(n => n.remove());

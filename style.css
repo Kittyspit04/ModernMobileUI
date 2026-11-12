@@ -1180,13 +1180,18 @@ body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(5) { animation-delay:
 .mmu-bg-note[hidden], .mmu-bg-filter[hidden] { display: none !important; }
 .mmu-bg-note { opacity: 0.8; }
 .mmu-bg-filter { margin: 0 !important; width: 100%; border-radius: 10px !important; font-size: 13px !important; }
+/* Rows get an explicit height (about 16:10 for three columns) instead of relying on
+   aspect-ratio: some mobile browsers size grid rows without it and the tiles overlap. */
 .mmu-bg-grid {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;
-    max-height: 232px; overflow-y: auto; overscroll-behavior: contain; padding: 2px; margin: -2px;
+    position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: clamp(56px, calc(20.5vw - 19px), 86px); align-content: start; gap: 6px;
+    max-height: 238px; overflow-y: auto; overscroll-behavior: contain; padding: 2px; margin: -2px;
     scrollbar-width: thin;
 }
 .mmu-bg-tile {
-    position: relative; display: block; aspect-ratio: 16 / 10; min-width: 0; padding: 0; margin: 0;
+    position: relative; display: block; box-sizing: border-box;
+    width: auto !important; height: 100% !important; min-width: 0 !important; min-height: 0 !important; max-height: none !important;
+    padding: 0 !important; margin: 0 !important; font-size: 0; line-height: 0;
     border: 0; border-radius: 10px; overflow: hidden; cursor: pointer; color: #fff;
     background: rgba(127, 127, 127, 0.18);
     box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.22);
@@ -1198,13 +1203,13 @@ body.mmu-anim .mmu-ct.is-opening .mmu-ct-grid > :nth-child(5) { animation-delay:
 .mmu-bg-tile:hover .mmu-bg-img { transform: scale(1.05); }
 .mmu-bg-name {
     position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 6px 4px;
-    font-size: 10.5px; font-weight: 600; line-height: 1.2; text-align: left;
+    font-size: 10.5px !important; font-weight: 600; line-height: 1.2; text-align: left;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.72)); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 .mmu-bg-badge {
     position: absolute; top: 4px; left: 4px; padding: 1px 6px; border-radius: 999px;
-    font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+    font-size: 9.5px; line-height: 1.4; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
     background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(6px);
 }
 .mmu-bg-tile.is-active { box-shadow: 0 0 0 2px var(--cai-accent, #ececf1), inset 0 0 0 1px rgba(0, 0, 0, 0.35); }
@@ -1217,7 +1222,7 @@ body.mmu-anim .mmu-bg-tile.is-active::after { animation: mmu-pop-in 0.35s var(--
 .mmu-bg-inherit .mmu-bg-img { filter: saturate(0.5) brightness(0.7); }
 .mmu-bg-inherit-icon {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -70%);
-    font-size: 15px; opacity: 0.9; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    font-size: 15px; line-height: 1; opacity: 0.9; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 .mmu-bg-skeleton { cursor: default; background: linear-gradient(100deg, rgba(127, 127, 127, 0.12) 30%, rgba(127, 127, 127, 0.26) 50%, rgba(127, 127, 127, 0.12) 70%) 0 0 / 300% 100%; }
 body.mmu-anim .mmu-bg-skeleton { animation: mmu-bg-shimmer 1.2s linear infinite; }
