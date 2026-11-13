@@ -805,22 +805,43 @@ body.mmu-sliders-locked input[type="range"]:not([data-mmu-free]):not([data-mmu-f
 html:has(> body.mmu-on) { overflow-x: hidden; }
 body.mmu-on { overflow-x: hidden; }
 
-/* Auto-hiding top bar */
+/* Auto-hiding top bar
+   The bar keeps its real height while hidden (--mmu-bar-h is resolved on <html>, before the
+   hidden state sets --topBarBlockSize to 0), so it can actually slide away instead of collapsing.
+   Hide: slides up, fades and softens. Show: drops back in with a gentle spring, icons one by one. */
+html { --mmu-bar-h: var(--topBarBlockSize, 45px); }
+body.mmu-autobar { --mmu-bar-in: cubic-bezier(0.2, 1.25, 0.4, 1); --mmu-bar-out: cubic-bezier(0.55, 0, 0.75, 0.2); }
 body.mmu-autobar #top-bar,
 body.mmu-autobar #top-settings-holder {
-    transition: transform 0.32s var(--cai-smooth, ease), opacity 0.25s ease, visibility 0.32s;
+    transition: transform 0.46s var(--mmu-bar-in), opacity 0.3s ease, filter 0.3s ease, visibility 0s;
     opacity: 1;
     visibility: visible;
+    will-change: transform, opacity;
 }
 body.mmu-autobar.mmu-bar-hidden #top-bar,
 body.mmu-autobar.mmu-bar-hidden #top-settings-holder {
-    transform: translateY(-105%);
+    height: var(--mmu-bar-h) !important;
+    transform: translateY(calc(-100% - 6px));
     opacity: 0;
+    filter: blur(4px);
     visibility: hidden;
     pointer-events: none;
+    transition: transform 0.34s var(--mmu-bar-out), opacity 0.28s ease 0.04s, filter 0.28s ease, visibility 0s linear 0.34s;
 }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > * { animation: mmu-bar-icon 0.5s var(--mmu-bar-in) backwards; }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > :nth-child(2) { animation-delay: 0.025s; }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > :nth-child(3) { animation-delay: 0.05s; }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > :nth-child(4) { animation-delay: 0.075s; }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > :nth-child(5) { animation-delay: 0.1s; }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > :nth-child(6) { animation-delay: 0.125s; }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > :nth-child(7) { animation-delay: 0.15s; }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > :nth-child(8) { animation-delay: 0.175s; }
+body.mmu-anim.mmu-autobar.mmu-bar-reveal #top-settings-holder > :nth-child(n+9) { animation-delay: 0.2s; }
+@keyframes mmu-bar-icon { from { opacity: 0; transform: translateY(-10px) scale(0.85); } to { opacity: 1; transform: none; } }
 body.mmu-autobar.mmu-bar-hidden { --topBarBlockSize: 0px; }
-body.mmu-autobar #sheld { transition: top 0.32s var(--cai-smooth, ease), height 0.32s var(--cai-smooth, ease), max-height 0.32s var(--cai-smooth, ease); }
+/* The chat follows the bar with the same timing */
+body.mmu-autobar #sheld { transition: top 0.46s var(--mmu-bar-in), height 0.46s var(--mmu-bar-in), max-height 0.46s var(--mmu-bar-in); }
+body.mmu-autobar.mmu-bar-hidden #sheld { transition: top 0.34s var(--mmu-bar-out), height 0.34s var(--mmu-bar-out), max-height 0.34s var(--mmu-bar-out); }
 body.mmu-autobar.mmu-bar-hidden #sheld {
     top: 0 !important;
     height: 100dvh !important;
