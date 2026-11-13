@@ -81,7 +81,7 @@ you are connected to.
 ### Reply for me & Polish
 Two buttons next to the send button. Neither sends anything; they only fill the input box.
 
-- **Reply for me** (wand icon): writes your persona's next message. By default it uses a **clean prompt** of
+- **Reply for me** (quill icon): writes your persona's next message. By default it uses a **clean prompt** of
   its own: the character card and scenario, your persona, the World Info entries the recent chat activates,
   the chat summary (Summarize extension) and the recent messages, cleaned the way SillyTavern cleans them for
   prompts (your prompt-only regex scripts) with status trackers, time/date headers, Internal States sections,

@@ -117,7 +117,7 @@ export function mount() {
                 selectRow('animationIntensity', t`Intensity`, [{ value: 'subtle', label: t`Subtle` }, { value: 'normal', label: t`Normal` }, { value: 'lively', label: t`Lively` }]),
                 checkbox('wordReveal', t`Word-by-word reveal while streaming`, t`Needs Streaming and “Stream Fade-In” in User Settings → Miscellaneous`),
             ),
-            section(t`Reply for me & Polish`, 'fa-wand-magic-sparkles',
+            section(t`Reply for me & Polish`, 'fa-feather-pointed',
                 checkbox('enhance.showReply', t`Show the Reply for me button`, t`Writes your persona's next message from the whole chat (character card, World Info, persona, history) into the input box, without sending it. Text already in the box is used as the idea for the reply`),
                 selectRow('enhance.replySource', t`Prompt`, [{ value: 'clean', label: t`Clean: card, persona, lore and recent chat` }, { value: 'preset', label: t`Full SillyTavern prompt with my preset` }]),
                 el('small', { class: 'mmu-opt-hint mmu-opt-hint-flush', text: t`Clean keeps your preset's prompts out, so trackers, time headers and Internal States meant for the character are not copied into your reply. Your preset's model settings still apply. "Full" sends everything your preset sends.` }),
