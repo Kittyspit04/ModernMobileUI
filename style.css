@@ -816,7 +816,8 @@ body.mmu-autobar #top-settings-holder {
     transition: transform 0.46s var(--mmu-bar-in), opacity 0.3s ease, filter 0.3s ease, visibility 0s;
     opacity: 1;
     visibility: visible;
-    will-change: transform, opacity;
+    /* No will-change here: will-change: opacity makes the bar a "backdrop root", and the menus and
+       side panels inside it then lose their frosted blur in Liquid Glass (text shows through). */
 }
 body.mmu-autobar.mmu-bar-hidden #top-bar,
 body.mmu-autobar.mmu-bar-hidden #top-settings-holder {
@@ -966,7 +967,8 @@ dialog.popup.mmu-preview-popup .mmu-popup-hint { margin: 0 0 6px; opacity: 0.7; 
    ========================================================================== */
 body.mmu-on[data-mmu-mode="glass"] {
     --mmu-glass-a: max(var(--mmu-glass-alpha, 0.35), var(--mmu-glass-floor, 0));
-    --mmu-glass-panel-a: min(0.9, calc(var(--mmu-glass-a) + 0.38));
+    /* Panels, menus and popups stay readable even where blur is unavailable or the glass is set very clear */
+    --mmu-glass-panel-a: clamp(0.8, calc(var(--mmu-glass-a) + 0.45), 0.92);
     --mmu-glass-fx: blur(var(--mmu-glass-blur, 16px)) saturate(170%) brightness(1.05);
     --mmu-glass-fill: rgba(var(--mmu-glass-rgb, 22, 24, 32), var(--mmu-glass-a));
     --mmu-glass-sheet: linear-gradient(160deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.04) 42%, rgba(255, 255, 255, 0) 68%, rgba(255, 255, 255, 0.06));
